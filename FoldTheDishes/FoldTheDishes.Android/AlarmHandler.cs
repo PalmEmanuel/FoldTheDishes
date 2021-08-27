@@ -1,9 +1,11 @@
-﻿using Android.Content;
+﻿using Android.App;
+using Android.Content;
 using FoldTheDishes.Services;
 
 namespace FoldTheDishes.Droid
 {
-    [BroadcastReceiver(Enabled = true, Label = "Local Notifications Broadcast Receiver")]
+    [BroadcastReceiver(Enabled = true, Label = "Fold The Dishes Broadcast Receiver")]
+    [IntentFilter(new string[] { "android.intent.action.BOOT_COMPLETED" })]
     public class AlarmHandler : BroadcastReceiver
     {
         public override void OnReceive(Context context, Intent intent)

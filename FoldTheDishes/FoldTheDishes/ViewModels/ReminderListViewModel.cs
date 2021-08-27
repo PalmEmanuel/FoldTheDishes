@@ -1,18 +1,54 @@
-﻿using System;
+﻿using FoldTheDishes.Models;
+using FoldTheDishes.Services;
+using System;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FoldTheDishes.ViewModels
 {
     public class ReminderListViewModel : BaseViewModel
     {
+        INotificationManager notificationManager;
+        int notificationNumber = 0;
+
+        public ICommand SendNotificationCommand { get; }
+        public ICommand ScheduleNotificationCommand { get; }
+
         public ReminderListViewModel()
         {
-            Title = "About";
-            OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://aka.ms/xamarin-quickstart"));
+            SendNotificationCommand = new Command(() => OnSendClick());
+            ScheduleNotificationCommand = new Command(() => OnScheduleClick());
+
+            notificationManager = DependencyService.Get<INotificationManager>();
+            notificationManager.NotificationReceived += (sender, eventArgs) =>
+            {
+                var evtData = (NotificationEventArgs)eventArgs;
+                ShowNotification(evtData.Title, evtData.Message + evtData.Id);
+            };
         }
 
-        public ICommand OpenWebCommand { get; }
+        void OnSendClick()
+        {
+            notificationNumber++;
+            string title = $"Local Notification #{notificationNumber}";
+            string message = $"You have now received {notificationNumber} notifications!";
+            notificationManager.SendNotification(title, message);
+        }
+
+        void OnScheduleClick()
+        {
+            notificationNumber++;
+            string title = $"Local Notification #{notificationNumber}";
+            string message = $"You have now received {notificationNumber} notifications!";
+            notificationManager.SendNotification(title, message, DateTime.Now.AddSeconds(10));
+        }
+
+        void ShowNotification(string title, string message)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                notificationManager.SendNotification(title + "hello", message + "world");
+            });
+        }
     }
 }

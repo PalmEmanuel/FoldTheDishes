@@ -9,7 +9,8 @@ using FoldTheDishes.Models;
 using Xamarin.Forms;
 using AndroidApp = Android.App.Application;
 
-[assembly: Dependency(typeof(FoldTheDishes.Services.AndroidNotificationManager))]
+[assembly: Dependency(typeof(FoldTheDishes.Services.AndroidNotificationManager)),
+    UsesPermission(Name = "android.permission.RECEIVE_BOOT_COMPLETED")]
 namespace FoldTheDishes.Services
 {
     public class AndroidNotificationManager : INotificationManager
@@ -58,7 +59,7 @@ namespace FoldTheDishes.Services
                 PendingIntent pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, pendingIntentId++, intent, PendingIntentFlags.CancelCurrent);
                 long triggerTime = GetNotifyTime(notifyTime.Value);
                 AlarmManager alarmManager = AndroidApp.Context.GetSystemService(Context.AlarmService) as AlarmManager;
-                alarmManager.Set(AlarmType.RtcWakeup, triggerTime, pendingIntent);
+                alarmManager.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, triggerTime, pendingIntent);
             }
             else
             {
