@@ -10,7 +10,7 @@ namespace FoldTheDishes.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
+        public IDataStore<Reminder> DataStore => DependencyService.Get<IDataStore<Reminder>>();
 
         bool isBusy = false;
         public bool IsBusy

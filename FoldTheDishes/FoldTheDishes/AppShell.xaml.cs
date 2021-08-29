@@ -10,9 +10,10 @@ namespace FoldTheDishes
     {
         public AppShell()
         {
+            Device.SetFlags(new string[] { "AppTheme_Experimental" });
             InitializeComponent();
-            Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
-            Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
+            Routing.RegisterRoute(nameof(ReminderDetailPage), typeof(ReminderDetailPage));
+            Routing.RegisterRoute(nameof(NewReminderPage), typeof(NewReminderPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

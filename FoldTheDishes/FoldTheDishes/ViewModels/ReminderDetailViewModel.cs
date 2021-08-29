@@ -7,7 +7,7 @@ using Xamarin.Forms;
 namespace FoldTheDishes.ViewModels
 {
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
-    public class ItemDetailViewModel : BaseViewModel
+    public class ReminderDetailViewModel : BaseViewModel
     {
         private string itemId;
         private string text;

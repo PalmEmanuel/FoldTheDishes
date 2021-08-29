@@ -8,14 +8,14 @@ using Xamarin.Forms.Xaml;
 
 namespace FoldTheDishes.Views
 {
-    public partial class NewItemPage : ContentPage
+    public partial class NewReminderPage : ContentPage
     {
-        public Item Item { get; set; }
+        public Reminder Item { get; set; }
 
-        public NewItemPage()
+        public NewReminderPage()
         {
             InitializeComponent();
-            BindingContext = new NewItemViewModel();
+            BindingContext = new NewReminderViewModel();
         }
     }
 }

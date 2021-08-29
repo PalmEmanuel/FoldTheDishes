@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using AndroidX.AppCompat.App;
 using FoldTheDishes.Services;
 using Xamarin.Forms;
 
@@ -20,8 +21,11 @@ namespace FoldTheDishes.Droid
 
             base.OnCreate(savedInstanceState);
 
+            AppCompatDelegate.DefaultNightMode = AppCompatDelegate.ModeNightFollowSystem;
+
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
+            FormsMaterial.Init(this, savedInstanceState);
             LoadApplication(new App());
             CreateNotificationFromIntent(Intent);
         }

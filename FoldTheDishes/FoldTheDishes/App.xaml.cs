@@ -1,8 +1,5 @@
 ﻿using FoldTheDishes.Services;
-using FoldTheDishes.Views;
-using System;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace FoldTheDishes
 {

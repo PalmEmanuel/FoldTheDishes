@@ -6,55 +6,56 @@ using System.Threading.Tasks;
 
 namespace FoldTheDishes.Services
 {
-    public class MockDataStore : IDataStore<Item>
+    public class MockDataStore : IDataStore<Reminder>
     {
-        readonly List<Item> items;
+        readonly List<Reminder> reminders;
 
         public MockDataStore()
         {
-            items = new List<Item>()
+            var now = DateTime.UtcNow;
+            reminders = new List<Reminder>()
             {
-                new Item { Id = Guid.NewGuid().ToString(), Text = "First item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Second item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Third item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fourth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fifth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Sixth item", Description="This is an item description." }
+                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "First item", Description="This is an item description." },
+                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "Second item", Description="This is an item description." },
+                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "Third item", Description="This is an item description." },
+                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "Fourth item", Description="This is an item description." },
+                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "Fifth item", Description="This is an item description." },
+                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "Sixth item", Description="This is an item description." }
             };
         }
 
-        public async Task<bool> AddItemAsync(Item item)
+        public async Task<bool> AddItemAsync(Reminder reminder)
         {
-            items.Add(item);
+            reminders.Add(reminder);
 
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdateItemAsync(Item item)
+        public async Task<bool> UpdateItemAsync(Reminder reminder)
         {
-            var oldItem = items.Where((Item arg) => arg.Id == item.Id).FirstOrDefault();
-            items.Remove(oldItem);
-            items.Add(item);
+            var oldReminder = reminders.Where((Reminder arg) => arg.Id == reminder.Id).FirstOrDefault();
+            reminders.Remove(oldReminder);
+            reminders.Add(reminder);
 
             return await Task.FromResult(true);
         }
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var oldItem = items.Where((Item arg) => arg.Id == id).FirstOrDefault();
-            items.Remove(oldItem);
+            var oldReminder = reminders.Where((Reminder arg) => arg.Id == id).FirstOrDefault();
+            reminders.Remove(oldReminder);
 
             return await Task.FromResult(true);
         }
 
-        public async Task<Item> GetItemAsync(string id)
+        public async Task<Reminder> GetItemAsync(string id)
         {
-            return await Task.FromResult(items.FirstOrDefault(s => s.Id == id));
+            return await Task.FromResult(reminders.FirstOrDefault(s => s.Id == id));
         }
 
-        public async Task<IEnumerable<Item>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<Reminder>> GetItemsAsync(bool forceRefresh = false)
         {
-            return await Task.FromResult(items);
+            return await Task.FromResult(reminders);
         }
     }
 }

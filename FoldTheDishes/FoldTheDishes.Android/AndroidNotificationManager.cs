@@ -3,7 +3,7 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
-using Android.Support.V4.App;
+using AndroidX.Core.App;
 using FoldTheDishes.Droid;
 using FoldTheDishes.Models;
 using Xamarin.Forms;
@@ -72,8 +72,7 @@ namespace FoldTheDishes.Services
             var args = new NotificationEventArgs()
             {
                 Title = title,
-                Message = message,
-                Id = "Hidden123"
+                Message = message
             };
             NotificationReceived?.Invoke(null, args);
         }
