@@ -6,7 +6,7 @@ namespace FoldTheDishes.Services
     {
         event EventHandler NotificationReceived;
         void Initialize();
-        void SendNotification(string title, string message, DateTime? notifyTime = null);
-        void ReceiveNotification(string title, string message);
+        void SendNotification(int id, string title, string message, DateTime? notifyTime = null);
+        void ReceiveNotification(int id, string title, string message);
     }
 }

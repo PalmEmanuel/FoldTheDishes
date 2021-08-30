@@ -9,10 +9,10 @@ namespace FoldTheDishes.ViewModels
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
     public class ReminderDetailViewModel : BaseViewModel
     {
-        private string itemId;
+        private int itemId;
         private string text;
         private string description;
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Text
         {
@@ -26,7 +26,7 @@ namespace FoldTheDishes.ViewModels
             set => SetProperty(ref description, value);
         }
 
-        public string ItemId
+        public int ItemId
         {
             get
             {
@@ -39,7 +39,7 @@ namespace FoldTheDishes.ViewModels
             }
         }
 
-        public async void LoadItemId(string itemId)
+        public async void LoadItemId(int itemId)
         {
             try
             {

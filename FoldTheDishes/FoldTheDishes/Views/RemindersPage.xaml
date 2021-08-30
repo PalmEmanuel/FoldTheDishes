@@ -20,28 +20,38 @@
     <RefreshView x:DataType="local:RemindersViewModel" Command="{Binding LoadRemindersCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
         <CollectionView x:Name="RemindersListView"
                 ItemsSource="{Binding Reminders}"
-                SelectionMode="None">
+                SelectionMode="None" >
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical"
+                           ItemSpacing="5" />
+            </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Padding="10" x:DataType="model:Reminder">
-                        <Label Text="{Binding Text}" 
-                            LineBreakMode="NoWrap"
-                            FontSize="16" />
-                        <Label Text="{Binding Description}" 
-                            LineBreakMode="NoWrap"
-                            FontSize="13" />
-                        <DatePicker Date="{Binding Date}" IsEnabled="False"
-                            FontSize="13" />
-                        <TimePicker Time="{Binding Time}" IsEnabled="False"
-                            FontSize="13" />
-                        <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                NumberOfTapsRequired="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:RemindersViewModel}}, Path=ReminderTapped}"		
-                                CommandParameter="{Binding .}">
-                            </TapGestureRecognizer>
-                        </StackLayout.GestureRecognizers>
-                    </StackLayout>
+                    <Frame CornerRadius="5" Padding="15" HasShadow="True" BackgroundColor="{StaticResource SecondaryBackgroundColorDark}">
+                        <StackLayout x:DataType="model:Reminder" BackgroundColor="{StaticResource SecondaryBackgroundColorDark}">
+                            <Label Text="{Binding Text}" 
+                                LineBreakMode="NoWrap"
+                                FontSize="16" />
+                            <Label Text="{Binding Description}" 
+                                LineBreakMode="NoWrap"
+                                FontSize="13" />
+                            <StackLayout Orientation="Horizontal" BackgroundColor="{StaticResource SecondaryBackgroundColorDark}">
+                                <Label Text="{Binding DueDate, StringFormat='{0:MMMM dd, yyyy}'}" 
+                                    LineBreakMode="NoWrap"
+                                    FontSize="13" />
+                                <Label Text="{Binding DueTime, StringFormat='{}{0:hh\\:mm}'}"
+                                    LineBreakMode="NoWrap"
+                                    FontSize="13" />
+                            </StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    NumberOfTapsRequired="1"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:RemindersViewModel}}, Path=ReminderTapped}"		
+                                    CommandParameter="{Binding .}">
+                                </TapGestureRecognizer>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                    </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

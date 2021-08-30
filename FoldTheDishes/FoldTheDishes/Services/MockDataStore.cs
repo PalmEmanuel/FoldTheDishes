@@ -12,15 +12,15 @@ namespace FoldTheDishes.Services
 
         public MockDataStore()
         {
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
             reminders = new List<Reminder>()
             {
-                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "First item", Description="This is an item description." },
-                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "Second item", Description="This is an item description." },
-                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "Third item", Description="This is an item description." },
-                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "Fourth item", Description="This is an item description." },
-                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "Fifth item", Description="This is an item description." },
-                new Reminder { Id = Guid.NewGuid().ToString(), Date = now, Time = now.TimeOfDay, Text = "Sixth item", Description="This is an item description." }
+                new Reminder { Id = 1, DueDate = now, DueTime = now.TimeOfDay, Text = "First reminder", Description = "This is an item description." },
+                new Reminder { Id = 2, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(1)), Text = "Second reminder", Description = "This is an item description." },
+                new Reminder { Id = 3, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(2)), Text = "Third reminder", Description = "This is an item description." },
+                new Reminder { Id = 4, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(3)), Text = "Fourth reminder", Description = "This is an item description." },
+                new Reminder { Id = 5, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(4)), Text = "Fifth reminder", Description = "This is an item description." },
+                new Reminder { Id = 6, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(5)), Text = "Sixth reminder", Description = "This is an item description." }
             };
         }
 
@@ -40,7 +40,7 @@ namespace FoldTheDishes.Services
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeleteItemAsync(string id)
+        public async Task<bool> DeleteItemAsync(int id)
         {
             var oldReminder = reminders.Where((Reminder arg) => arg.Id == id).FirstOrDefault();
             reminders.Remove(oldReminder);
@@ -48,7 +48,7 @@ namespace FoldTheDishes.Services
             return await Task.FromResult(true);
         }
 
-        public async Task<Reminder> GetItemAsync(string id)
+        public async Task<Reminder> GetItemAsync(int id)
         {
             return await Task.FromResult(reminders.FirstOrDefault(s => s.Id == id));
         }

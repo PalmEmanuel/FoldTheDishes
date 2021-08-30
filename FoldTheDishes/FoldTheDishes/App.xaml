@@ -22,12 +22,14 @@
         <Color x:Key="ButtonTextColorDark">#FFFFFF</Color>
 
         <Color x:Key="AccentColorLight">#96d1ff</Color>
-        <Color x:Key="AccentColorDark">#111111</Color>
+        <Color x:Key="AccentColorDark">#ffab00</Color>
 
         <Color x:Key="PrimaryBackgroundDark">#2196F3</Color>
         <Color x:Key="PrimaryBackgroundLight">#2196F3</Color>
         <Color x:Key="PrimaryTextDark">#ffffff</Color>
         <Color x:Key="PrimaryTextLight">#ffffff</Color>
+        
+        <Color x:Key="SecondaryBackgroundColorDark">#333333</Color>
         
         <Style TargetType="Button">
             <Setter Property="TextColor" 
@@ -54,7 +56,25 @@
                 </VisualStateGroupList>
             </Setter>
         </Style>
-        
+
+        <Style TargetType="Label">
+            <Setter Property="TextColor"
+            Value="{AppThemeBinding Dark={StaticResource TextColorDark}, 
+                        Light={StaticResource TextColorLight}}" />
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="TextColor"
+            Value="{AppThemeBinding Dark={StaticResource TextColorDark}, 
+                        Light={StaticResource TextColorLight}}" />
+        </Style>
+
+        <Style TargetType="TimePicker">
+            <Setter Property="TextColor"
+            Value="{AppThemeBinding Dark={StaticResource TextColorDark}, 
+                        Light={StaticResource TextColorLight}}" />
+        </Style>
+
         <Style TargetType="ContentPage">
             <Setter Property="BackgroundColor"
             Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, 
@@ -72,11 +92,20 @@
             Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, 
                         Light={StaticResource BackgroundColorLight}}" />
         </Style>
-        
+
+        <Style TargetType="CollectionView">
+            <Setter Property="BackgroundColor"
+            Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, 
+                        Light={StaticResource BackgroundColorLight}}" />
+        </Style>
+
         <Style TargetType="RefreshView">
             <Setter Property="BackgroundColor"
             Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, 
                         Light={StaticResource BackgroundColorLight}}" />
+            <Setter Property="RefreshColor"
+            Value="{AppThemeBinding Dark={StaticResource TextColorDark}, 
+                        Light={StaticResource TextColorLight}}" />
         </Style>
     </Application.Resources>
 </Application>

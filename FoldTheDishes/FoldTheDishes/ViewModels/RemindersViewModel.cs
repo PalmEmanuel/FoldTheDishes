@@ -4,6 +4,7 @@ using FoldTheDishes.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -77,7 +78,7 @@ namespace FoldTheDishes.ViewModels
             try
             {
                 Reminders.Clear();
-                var reminders = await DataStore.GetItemsAsync(true);
+                var reminders = (await DataStore.GetItemsAsync()).OrderBy(r => r.DueDate.Add(r.DueTime));
                 foreach (var item in reminders)
                 {
                     Reminders.Add(item);

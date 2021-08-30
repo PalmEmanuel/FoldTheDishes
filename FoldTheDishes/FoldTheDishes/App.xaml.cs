@@ -10,7 +10,8 @@ namespace FoldTheDishes
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
+            var reminderStore = ReminderStore.Instance.GetAwaiter().GetResult();
+            DependencyService.RegisterSingleton(reminderStore);
             MainPage = new AppShell();
         }
 

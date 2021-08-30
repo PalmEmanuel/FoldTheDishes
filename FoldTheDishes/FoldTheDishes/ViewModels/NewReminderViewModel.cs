@@ -29,14 +29,12 @@ namespace FoldTheDishes.ViewModels
             {
                 var evtData = (NotificationEventArgs)eventArgs;
                 System.Diagnostics.Debug.WriteLine($"Received notification click! {evtData.Title} - {evtData.Message}");
-                //ShowNotification(evtData.Title, evtData.Message);
             };
         }
 
         private bool ValidateSave()
         {
-            return !string.IsNullOrWhiteSpace(text) &&
-                !string.IsNullOrWhiteSpace(description);
+            return !string.IsNullOrWhiteSpace(text);
         }
 
         public string Text
@@ -73,15 +71,17 @@ namespace FoldTheDishes.ViewModels
         {
             Reminder newReminder = new Reminder()
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = 0,
                 Text = Text,
                 Description = Description,
-                Date = Date,
-                Time = Time
+                DueDate = Date,
+                DueTime = Time,
+                Created = DateTime.Now,
+                Completed = DateTime.MinValue
             };
 
             await DataStore.AddItemAsync(newReminder);
-            notificationManager.SendNotification(newReminder.Text, newReminder.Description, newReminder.Date.Add(newReminder.Time));
+            notificationManager.SendNotification(newReminder.Id, newReminder.Text, newReminder.Description, newReminder.DueDate.Add(newReminder.DueTime));
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");
