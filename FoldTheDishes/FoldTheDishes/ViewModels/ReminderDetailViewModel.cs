@@ -19,8 +19,11 @@ namespace FoldTheDishes.ViewModels
             get => id;
             set
             {
+                if (value != id)
+                {
+                    LoadItemId(value);
+                }
                 SetProperty(ref id, value);
-                LoadItemId(value);
             }
         }
 
@@ -58,9 +61,9 @@ namespace FoldTheDishes.ViewModels
 
         public ReminderDetailViewModel()
         {
-            SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
             DeleteCommand = new Command(OnDelete);
+            SaveCommand = new Command(OnSave, ValidateSave);
             this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
 
@@ -86,15 +89,7 @@ namespace FoldTheDishes.ViewModels
 
         private async void OnDelete()
         {
-            await DataStore.DeleteItemAsync(
-                new Reminder()
-            {
-                Id = Id,
-                Text = Text,
-                Description = Description,
-                DueDate = DueDate,
-                DueTime = DueTime
-            });
+            await DataStore.DeleteItemAsync(new Reminder { Id = Id });
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");
@@ -112,7 +107,7 @@ namespace FoldTheDishes.ViewModels
             };
 
             await DataStore.UpdateItemAsync(newReminder);
-
+            notificationManager.SendNotification(Id, Text, Description, DueDate.Add(DueTime));
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");
         }
