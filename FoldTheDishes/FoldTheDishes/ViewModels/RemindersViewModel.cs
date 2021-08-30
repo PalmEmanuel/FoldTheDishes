@@ -35,9 +35,6 @@ namespace FoldTheDishes.ViewModels
 
             AddReminderCommand = new Command(OnAddReminder);
 
-            //SendNotificationCommand = new Command(() => OnSendClick());
-            //ScheduleNotificationCommand = new Command(() => OnScheduleClick());
-
             notificationManager = DependencyService.Get<INotificationManager>();
             notificationManager.NotificationReceived += (sender, eventArgs) =>
             {
@@ -45,22 +42,6 @@ namespace FoldTheDishes.ViewModels
                 ShowNotification(evtData.Title, evtData.Message);
             };
         }
-
-        //void OnSendClick()
-        //{
-        //    notificationNumber++;
-        //    string title = $"Local Notification #{notificationNumber}";
-        //    string message = $"You have now received {notificationNumber} notifications!";
-        //    notificationManager.SendNotification(title, message);
-        //}
-
-        //void OnScheduleClick()
-        //{
-        //    notificationNumber++;
-        //    string title = $"Local Notification #{notificationNumber}";
-        //    string message = $"You have now received {notificationNumber} notifications!";
-        //    notificationManager.SendNotification(title, message, DateTime.Now.AddSeconds(10));
-        //}
 
         void ShowNotification(string title, string message)
         {
@@ -121,7 +102,7 @@ namespace FoldTheDishes.ViewModels
                 return;
 
             // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.ItemId)}={reminder.Id}");
+            await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={reminder.Id}");
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 
 namespace FoldTheDishes.Models
 {
+    [Table("Reminder")]
     public class Reminder
     {
         [PrimaryKey, AutoIncrement]

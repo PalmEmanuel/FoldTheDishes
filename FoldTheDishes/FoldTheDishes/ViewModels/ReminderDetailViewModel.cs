@@ -1,18 +1,28 @@
 ﻿using FoldTheDishes.Models;
+using FoldTheDishes.Services;
 using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace FoldTheDishes.ViewModels
 {
-    [QueryProperty(nameof(ItemId), nameof(ItemId))]
+    [QueryProperty(nameof(Id), nameof(Id))]
     public class ReminderDetailViewModel : BaseViewModel
     {
-        private int itemId;
         private string text;
         private string description;
-        public int Id { get; set; }
+        private int id;
+        private DateTime dueDate;
+        private TimeSpan dueTime;
+
+        public int Id
+        {
+            get => id;
+            set
+            {
+                SetProperty(ref id, value);
+                LoadItemId(value);
+            }
+        }
 
         public string Text
         {
@@ -26,31 +36,101 @@ namespace FoldTheDishes.ViewModels
             set => SetProperty(ref description, value);
         }
 
-        public int ItemId
+        public DateTime DueDate
         {
-            get
+            get => dueDate;
+            set => SetProperty(ref dueDate, value);
+        }
+
+        public TimeSpan DueTime
+        {
+            get => dueTime;
+            set => SetProperty(ref dueTime, value);
+        }
+
+        public DateTime Created { get; set; }
+
+        INotificationManager notificationManager;
+
+        public Command SaveCommand { get; }
+        public Command CancelCommand { get; }
+        public Command DeleteCommand { get; }
+
+        public ReminderDetailViewModel()
+        {
+            SaveCommand = new Command(OnSave, ValidateSave);
+            CancelCommand = new Command(OnCancel);
+            DeleteCommand = new Command(OnDelete);
+            this.PropertyChanged +=
+                (_, __) => SaveCommand.ChangeCanExecute();
+
+            notificationManager = DependencyService.Get<INotificationManager>();
+            notificationManager.NotificationReceived += (sender, eventArgs) =>
             {
-                return itemId;
-            }
-            set
+                var evtData = (NotificationEventArgs)eventArgs;
+                System.Diagnostics.Debug.WriteLine($"Received notification click! {evtData.Title} - {evtData.Message}");
+            };
+        }
+
+        private bool ValidateSave()
+        {
+            var now = DateTime.Now;
+            return !string.IsNullOrWhiteSpace(text) && DueDate.Add(DueTime) >= now;
+        }
+
+        private async void OnCancel()
+        {
+            // This will pop the current page off the navigation stack
+            await Shell.Current.GoToAsync("..");
+        }
+
+        private async void OnDelete()
+        {
+            await DataStore.DeleteItemAsync(
+                new Reminder()
             {
-                itemId = value;
-                LoadItemId(value);
-            }
+                Id = Id,
+                Text = Text,
+                Description = Description,
+                DueDate = DueDate,
+                DueTime = DueTime
+            });
+
+            // This will pop the current page off the navigation stack
+            await Shell.Current.GoToAsync("..");
+        }
+
+        private async void OnSave()
+        {
+            Reminder newReminder = new Reminder()
+            {
+                Id = Id,
+                Text = Text,
+                Description = Description,
+                DueDate = DueDate,
+                DueTime = DueTime
+            };
+
+            await DataStore.UpdateItemAsync(newReminder);
+
+            // This will pop the current page off the navigation stack
+            await Shell.Current.GoToAsync("..");
         }
 
         public async void LoadItemId(int itemId)
         {
             try
             {
-                var item = await DataStore.GetItemAsync(itemId);
-                Id = item.Id;
-                Text = item.Text;
-                Description = item.Description;
+                var reminder = await DataStore.GetItemAsync(itemId);
+                Id = reminder.Id;
+                Text = reminder.Text;
+                Description = reminder.Description;
+                DueDate = reminder.DueDate;
+                DueTime = reminder.DueTime;
             }
             catch (Exception)
             {
-                Debug.WriteLine("Failed to Load Item");
+                System.Diagnostics.Debug.WriteLine("Failed to Load Item");
             }
         }
     }

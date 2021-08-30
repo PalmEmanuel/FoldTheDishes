@@ -76,11 +76,6 @@ namespace FoldTheDishes.Services
             }
         }
 
-        public Task<int> DeleteItemAsync(int id)
-        {
-            return Database.DeleteAsync(GetItemAsync(id));
-        }
-
         public Task<int> DeleteItemAsync(Reminder item)
         {
             return Database.DeleteAsync(item);
