@@ -9,8 +9,8 @@ using Xamarin.Forms;
 
 namespace FoldTheDishes.Droid
 {
-    [Activity(Label = "FoldTheDishes", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true,
-        LaunchMode = LaunchMode.SingleTop,
+    [Activity(Label = "fold the dishes", Theme = "@style/MainTheme",
+        LaunchMode = LaunchMode.SingleTop, Icon = "@mipmap/ic_launcher", RoundIcon = "@mipmap/ic_launcher_round",
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
