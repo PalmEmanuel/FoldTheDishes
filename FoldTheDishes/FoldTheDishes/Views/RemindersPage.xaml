@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FoldTheDishes.Views.RemindersPage"
              Title="{Binding Title}"
+             xmlns:converters="clr-namespace:FoldTheDishes.Converters"  
              xmlns:local="clr-namespace:FoldTheDishes.ViewModels"  
              xmlns:model="clr-namespace:FoldTheDishes.Models"  
              x:Name="BrowseRemindersPage"
@@ -13,29 +14,34 @@
         <!--<ToolbarItem Text="Ping now" Command="{Binding SendNotificationCommand}" />-->
         <!--<ToolbarItem Text="Ping 10 sec" Command="{Binding ScheduleNotificationCommand}" />-->
     </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:SeparatorVisibilityConverter x:Key="SeparatorVisibilityConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <!--
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
       https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
     -->
-    <RefreshView x:DataType="local:RemindersViewModel" Command="{Binding LoadRemindersCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-        <CollectionView x:Name="RemindersListView"
-                ItemsSource="{Binding Reminders}"
-                SelectionMode="None" >
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical"
-                           ItemSpacing="5" />
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame CornerRadius="5" Padding="15" HasShadow="True" BackgroundColor="{StaticResource SecondaryBackgroundColorDark}">
-                        <StackLayout x:DataType="model:Reminder" BackgroundColor="{StaticResource SecondaryBackgroundColorDark}">
+    <RefreshView x:DataType="local:RemindersViewModel" Command="{Binding LoadRemindersCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}" >
+        <Grid Padding="0,10,0,0">
+            <CollectionView x:Name="RemindersListView"
+                    ItemsSource="{Binding Reminders}"
+                    SelectionMode="None" >
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                               ItemSpacing="5" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout x:DataType="model:Reminder" Padding="10,5,10,5">
+                            <BoxView Style="{StaticResource Separator}"
+                                IsVisible="{Binding ., Converter={StaticResource SeparatorVisibilityConverter}, ConverterParameter={x:Reference Name=RemindersListView}}" />
                             <Label Text="{Binding Text}" 
                                 LineBreakMode="NoWrap"
                                 FontSize="16" />
-                            <Label Text="{Binding Description}" 
-                                LineBreakMode="NoWrap"
-                                FontSize="13" />
-                            <StackLayout Orientation="Horizontal" BackgroundColor="{StaticResource SecondaryBackgroundColorDark}">
+                            <StackLayout Orientation="Horizontal" >
                                 <Label Text="{Binding DueDate, StringFormat='{0:MMMM dd, yyyy}'}" 
                                     LineBreakMode="NoWrap"
                                     FontSize="13" />
@@ -51,9 +57,9 @@
                                 </TapGestureRecognizer>
                             </StackLayout.GestureRecognizers>
                         </StackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
     </RefreshView>
 </ContentPage>

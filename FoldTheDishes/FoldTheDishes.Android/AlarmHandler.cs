@@ -13,11 +13,10 @@ namespace FoldTheDishes.Droid
             if (intent?.Extras != null)
             {
                 int id = intent.GetIntExtra(AndroidNotificationManager.IdKey, -1);
-                string title = intent.GetStringExtra(AndroidNotificationManager.TitleKey);
-                string message = intent.GetStringExtra(AndroidNotificationManager.MessageKey);
+                string text = intent.GetStringExtra(AndroidNotificationManager.TextKey);
 
                 AndroidNotificationManager manager = AndroidNotificationManager.Instance ?? new AndroidNotificationManager();
-                manager.Show(id, title, message);
+                manager.Show(id, text);
             }
         }
     }

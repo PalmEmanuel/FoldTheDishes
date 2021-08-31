@@ -20,8 +20,7 @@ namespace FoldTheDishes.Services
         const string channelDescription = "The default channel for notifications.";
 
         public const string IdKey = "id";
-        public const string TitleKey = "title";
-        public const string MessageKey = "message";
+        public const string TextKey = "title";
 
         bool channelInitialized = false;
         int messageId = 0;
@@ -43,7 +42,7 @@ namespace FoldTheDishes.Services
             }
         }
 
-        public void SendNotification(int id, string title, string message, DateTime? notifyTime = null)
+        public void SendNotification(int id, string text, DateTime? notifyTime = null)
         {
             if (!channelInitialized)
             {
@@ -53,8 +52,7 @@ namespace FoldTheDishes.Services
             if (notifyTime != null)
             {
                 Intent intent = new Intent(AndroidApp.Context, typeof(AlarmHandler));
-                intent.PutExtra(TitleKey, title);
-                intent.PutExtra(MessageKey, message);
+                intent.PutExtra(TextKey, text);
 
                 PendingIntent pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, id, intent, PendingIntentFlags.CancelCurrent);
                 long triggerTime = GetNotifyTime(notifyTime.Value);
@@ -63,34 +61,31 @@ namespace FoldTheDishes.Services
             }
             else
             {
-                Show(id, title, message);
+                Show(id, text);
             }
         }
 
-        public void ReceiveNotification(int id, string title, string message)
+        public void ReceiveNotification(int id, string text)
         {
             var args = new NotificationEventArgs()
             {
                 Id = id,
-                Title = title,
-                Message = message
+                Text = text
             };
             NotificationReceived?.Invoke(null, args);
         }
 
-        public void Show(int id, string title, string message)
+        public void Show(int id, string text)
         {
             Intent intent = new Intent(AndroidApp.Context, typeof(MainActivity));
             intent.PutExtra(IdKey, id);
-            intent.PutExtra(TitleKey, title);
-            intent.PutExtra(MessageKey, message);
+            intent.PutExtra(TextKey, text);
 
             PendingIntent pendingIntent = PendingIntent.GetActivity(AndroidApp.Context, id, intent, PendingIntentFlags.UpdateCurrent);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(AndroidApp.Context, channelId)
                 .SetContentIntent(pendingIntent)
-                .SetContentTitle(title)
-                .SetContentText(message)
+                .SetContentText(text)
                 .SetLargeIcon(BitmapFactory.DecodeResource(AndroidApp.Context.Resources, Resource.Drawable.xamarin_logo))
                 .SetSmallIcon(Resource.Drawable.xamarin_logo)
                 .SetDefaults((int)NotificationDefaults.Sound | (int)NotificationDefaults.Vibrate);

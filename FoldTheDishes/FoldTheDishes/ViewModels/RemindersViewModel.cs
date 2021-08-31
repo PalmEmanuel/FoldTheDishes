@@ -39,11 +39,11 @@ namespace FoldTheDishes.ViewModels
             notificationManager.NotificationReceived += (sender, eventArgs) =>
             {
                 var evtData = (NotificationEventArgs)eventArgs;
-                ShowNotification(evtData.Title, evtData.Message);
+                ShowNotification(evtData.Text);
             };
         }
 
-        void ShowNotification(string title, string message)
+        void ShowNotification(string title)
         {
             Device.BeginInvokeOnMainThread(() =>
             {

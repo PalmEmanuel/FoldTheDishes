@@ -15,12 +15,12 @@ namespace FoldTheDishes.Services
             var now = DateTime.Now;
             reminders = new List<Reminder>()
             {
-                new Reminder { Id = 1, DueDate = now, DueTime = now.TimeOfDay, Text = "First reminder", Description = "This is an item description." },
-                new Reminder { Id = 2, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(1)), Text = "Second reminder", Description = "This is an item description." },
-                new Reminder { Id = 3, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(2)), Text = "Third reminder", Description = "This is an item description." },
-                new Reminder { Id = 4, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(3)), Text = "Fourth reminder", Description = "This is an item description." },
-                new Reminder { Id = 5, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(4)), Text = "Fifth reminder", Description = "This is an item description." },
-                new Reminder { Id = 6, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(5)), Text = "Sixth reminder", Description = "This is an item description." }
+                new Reminder { Id = 1, DueDate = now, DueTime = now.TimeOfDay, Text = "First reminder" },
+                new Reminder { Id = 2, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(1)), Text = "Second reminder" },
+                new Reminder { Id = 3, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(2)), Text = "Third reminder" },
+                new Reminder { Id = 4, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(3)), Text = "Fourth reminder" },
+                new Reminder { Id = 5, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(4)), Text = "Fifth reminder" },
+                new Reminder { Id = 6, DueDate = now, DueTime = now.TimeOfDay.Add(TimeSpan.FromMinutes(5)), Text = "Sixth reminder" }
             };
         }
 

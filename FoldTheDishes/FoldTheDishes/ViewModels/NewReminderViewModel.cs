@@ -28,7 +28,7 @@ namespace FoldTheDishes.ViewModels
             notificationManager.NotificationReceived += (sender, eventArgs) =>
             {
                 var evtData = (NotificationEventArgs)eventArgs;
-                System.Diagnostics.Debug.WriteLine($"Received notification click! {evtData.Title} - {evtData.Message}");
+                System.Diagnostics.Debug.WriteLine($"Received notification click! {evtData.Text}");
             };
         }
 
@@ -73,7 +73,6 @@ namespace FoldTheDishes.ViewModels
             {
                 Id = 0,
                 Text = Text,
-                Description = Description,
                 DueDate = Date,
                 DueTime = Time,
                 Created = DateTime.Now,
@@ -81,7 +80,7 @@ namespace FoldTheDishes.ViewModels
             };
 
             await DataStore.AddItemAsync(newReminder);
-            notificationManager.SendNotification(newReminder.Id, newReminder.Text, newReminder.Description, newReminder.DueDate.Add(newReminder.DueTime));
+            notificationManager.SendNotification(newReminder.Id, newReminder.Text, newReminder.DueDate.Add(newReminder.DueTime));
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");
