@@ -7,21 +7,29 @@
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
              Visual="Material">
-    <ContentPage.Content>
-        <StackLayout Spacing="3" Padding="15">
-            <Label Text="Text" FontSize="Medium" />
-            <Entry Text="{Binding Text, Mode=TwoWay}" FontSize="Medium" />
-            <Label Text="Description" FontSize="Medium" />
-            <Editor Text="{Binding Description, Mode=TwoWay}" AutoSize="TextChanges" FontSize="Medium" Margin="0" />
-            <Label Text="Date" FontSize="Medium" />
-            <DatePicker Date="{Binding Date, Mode=TwoWay}" FontSize="Medium" Margin="0" />
-            <Label Text="Time" FontSize="Medium" />
-            <TimePicker Time="{Binding Time, Mode=TwoWay}" FontSize="Medium" Margin="0" />
-            <StackLayout Orientation="Horizontal">
-                <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
-                <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
-            </StackLayout>
+    
+    <StackLayout Spacing="3" Padding="15">
+        <Entry Text="{Binding Text, Mode=TwoWay}" FontSize="Medium" Placeholder="Title" >
+            <Entry.Keyboard>
+                <Keyboard x:FactoryMethod="Create">
+                    <x:Arguments>
+                        <KeyboardFlags>CapitalizeSentence</KeyboardFlags>
+                    </x:Arguments>
+                </Keyboard>
+            </Entry.Keyboard>
+        </Entry>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <DatePicker Grid.Column="0" Date="{Binding DueDate, Mode=TwoWay}" FontSize="Medium" Margin="0" />
+            <TimePicker Grid.Column="1" Time="{Binding DueTime, Mode=TwoWay}" FontSize="Medium" Margin="0" />
+        </Grid>
+        <StackLayout Orientation="Horizontal">
+            <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
+            <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
         </StackLayout>
-    </ContentPage.Content>
+    </StackLayout>
     
 </ContentPage>

@@ -2,6 +2,7 @@
 using FoldTheDishes.Services;
 using System;
 using Xamarin.Forms;
+using FoldTheDishes;
 
 namespace FoldTheDishes.ViewModels
 {
@@ -9,10 +10,24 @@ namespace FoldTheDishes.ViewModels
     public class ReminderDetailViewModel : BaseViewModel
     {
         private string text;
-        private string description;
         private int id;
         private DateTime dueDate;
         private TimeSpan dueTime;
+
+        private string originalText;
+        private DateTime originalDueDate;
+        private TimeSpan originalDueTime;
+
+        private bool isChanged;
+        public bool IsChanged
+        {
+            get
+            {
+                IsChanged = text != originalText || dueDate != originalDueDate || dueTime != originalDueTime;
+                return isChanged;
+            }
+            set => SetProperty(ref isChanged, value);
+        }
 
         public int Id
         {
@@ -30,13 +45,10 @@ namespace FoldTheDishes.ViewModels
         public string Text
         {
             get => text;
-            set => SetProperty(ref text, value);
-        }
-
-        public string Description
-        {
-            get => description;
-            set => SetProperty(ref description, value);
+            set
+            {
+                SetProperty(ref text, value);
+            }
         }
 
         public DateTime DueDate
@@ -78,7 +90,7 @@ namespace FoldTheDishes.ViewModels
         private bool ValidateSave()
         {
             var now = DateTime.Now;
-            return !string.IsNullOrWhiteSpace(text) && DueDate.Add(DueTime) >= now;
+            return !string.IsNullOrWhiteSpace(text) && dueDate.Add(dueTime) >= now && IsChanged;
         }
 
         private async void OnCancel()
@@ -89,10 +101,17 @@ namespace FoldTheDishes.ViewModels
 
         private async void OnDelete()
         {
-            await DataStore.DeleteItemAsync(new Reminder { Id = Id });
+            var action = await Shell.Current.DisplayAlert("Delete reminder?", "This will permanently remove the reminder from your list." ,
+                Constants.CONFIRM_BUTTON_TEXT,
+                Constants.CANCEL_BUTTON_TEXT);
+            if (action)
+            {
+                notificationManager.DeleteNotification(id);
+                await DataStore.DeleteItemAsync(new Reminder { Id = Id });
 
-            // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..");
+                // This will pop the current page off the navigation stack
+                await Shell.Current.GoToAsync("..");
+            }
         }
 
         private async void OnSave()
@@ -106,7 +125,7 @@ namespace FoldTheDishes.ViewModels
             };
 
             await DataStore.UpdateItemAsync(newReminder);
-            notificationManager.DeleteNotification(newReminder.Id);
+            // Replaces the old scheduled notification
             notificationManager.SendNotification(Id, Text, DueDate.Add(DueTime));
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");
@@ -118,9 +137,9 @@ namespace FoldTheDishes.ViewModels
             {
                 var reminder = await DataStore.GetItemAsync(itemId);
                 Id = reminder.Id;
-                Text = reminder.Text;
-                DueDate = reminder.DueDate;
-                DueTime = reminder.DueTime;
+                Text = originalText = reminder.Text;
+                DueDate = originalDueDate = reminder.DueDate;
+                DueTime = originalDueTime = reminder.DueTime;
             }
             catch (Exception)
             {

@@ -9,8 +9,8 @@ namespace FoldTheDishes.ViewModels
     {
         private string text;
         private string description;
-        private DateTime date;
-        private TimeSpan time;
+        private DateTime dueDate;
+        private TimeSpan dueTime;
 
         INotificationManager notificationManager;
 
@@ -21,8 +21,8 @@ namespace FoldTheDishes.ViewModels
             this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
 
-            date = DateTime.Now.Date;
-            time = DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(5));
+            dueDate = DateTime.Now.Date;
+            dueTime = DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(5));
 
             notificationManager = DependencyService.Get<INotificationManager>();
             notificationManager.NotificationReceived += (sender, eventArgs) =>
@@ -47,15 +47,15 @@ namespace FoldTheDishes.ViewModels
             get => description;
             set => SetProperty(ref description, value);
         }
-        public DateTime Date
+        public DateTime DueDate
         {
-            get => date;
-            set => SetProperty(ref date, value);
+            get => dueDate;
+            set => SetProperty(ref dueDate, value);
         }
-        public TimeSpan Time
+        public TimeSpan DueTime
         {
-            get => time;
-            set => SetProperty(ref time, value);
+            get => dueTime;
+            set => SetProperty(ref dueTime, value);
         }
 
         public Command SaveCommand { get; }
@@ -73,8 +73,8 @@ namespace FoldTheDishes.ViewModels
             {
                 Id = 0,
                 Text = Text,
-                DueDate = Date,
-                DueTime = Time,
+                DueDate = DueDate,
+                DueTime = DueTime,
                 Created = DateTime.Now,
                 Completed = DateTime.MinValue
             };

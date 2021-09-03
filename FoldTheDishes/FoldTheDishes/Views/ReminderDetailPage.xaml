@@ -6,16 +6,24 @@
              Visual="Material">
 
     <StackLayout Spacing="20" Padding="15">
-        <Label Text="Text:" FontSize="Medium" />
-        <Label Text="{Binding Text, Mode=TwoWay}" FontSize="Small"/>
-        <Label Text="{Binding Id}" FontSize="Small" IsEnabled="false"/>
-        <Label Text="Description:" FontSize="Medium" />
-        <Label Text="{Binding Description, Mode=TwoWay}" FontSize="Small"/>
-        <Label Text="Date:" FontSize="Medium" />
-        <DatePicker Date="{Binding DueDate, Mode=TwoWay}" FontSize="Small"/>
-        <Label Text="Time:" FontSize="Medium" />
-        <TimePicker Time="{Binding DueTime, Mode=TwoWay}" FontSize="Small"/>
-        <StackLayout Orientation="Horizontal">
+        <Entry Text="{Binding Text, Mode=TwoWay}">
+            <Entry.Keyboard>
+                <Keyboard x:FactoryMethod="Create">
+                    <x:Arguments>
+                        <KeyboardFlags>CapitalizeSentence</KeyboardFlags>
+                    </x:Arguments>
+                </Keyboard>
+            </Entry.Keyboard>
+        </Entry>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <DatePicker Grid.Column="0" Date="{Binding DueDate, Mode=TwoWay}"/>
+            <TimePicker Grid.Column="1" Time="{Binding DueTime, Mode=TwoWay}"/>
+        </Grid>
+        <StackLayout Orientation="Horizontal" IsVisible="{Binding IsChanged}">
             <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
             <Button Text="Delete" Command="{Binding DeleteCommand}" HorizontalOptions="FillAndExpand"></Button>
             <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>

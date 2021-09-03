@@ -1,7 +1,5 @@
-﻿using FoldTheDishes.ViewModels;
-using FoldTheDishes.Views;
+﻿using FoldTheDishes.Views;
 using System;
-using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace FoldTheDishes
@@ -18,7 +16,7 @@ namespace FoldTheDishes
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//LoginPage");
+            await Current.GoToAsync("//LoginPage");
         }
     }
 }

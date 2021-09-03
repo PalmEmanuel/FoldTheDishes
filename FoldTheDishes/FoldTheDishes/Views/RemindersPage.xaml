@@ -11,8 +11,6 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding AddReminderCommand}" />
-        <!--<ToolbarItem Text="Ping now" Command="{Binding SendNotificationCommand}" />-->
-        <!--<ToolbarItem Text="Ping 10 sec" Command="{Binding ScheduleNotificationCommand}" />-->
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
