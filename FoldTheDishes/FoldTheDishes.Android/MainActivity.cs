@@ -6,6 +6,9 @@ using Android.Runtime;
 using Android.Views;
 using AndroidX.AppCompat.App;
 using FoldTheDishes.Services;
+using FoldTheDishes.ViewModels;
+using FoldTheDishes.Views;
+using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -14,7 +17,7 @@ namespace FoldTheDishes.Droid
     [Activity(Label = "fold the dishes", Theme = "@style/MainTheme",
         LaunchMode = LaunchMode.SingleTop, Icon = "@mipmap/ic_launcher", RoundIcon = "@mipmap/ic_launcher_round",
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
-    public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    public class MainActivity : FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -62,6 +65,32 @@ namespace FoldTheDishes.Droid
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        // https://theconfuzedsourcecode.wordpress.com/2017/03/12/lets-override-navigation-bar-back-button-click-in-xamarin-forms/
+        public override void OnBackPressed()
+        {
+            // this is not necessary, but in Android user 
+            // has both Nav bar back button and
+            // physical back button its safe 
+            // to cover the both events
+
+            // retrieve the current xamarin forms page instance
+            var currentContext = (BaseViewModel)
+            Xamarin.Forms.Application.
+            Current.MainPage.Navigation.
+            NavigationStack.LastOrDefault().BindingContext;
+
+            // check if the page has subscribed to 
+            // the custom back button event
+            if (currentContext?.CustomBackButtonAction != null)
+            {
+                currentContext?.CustomBackButtonAction.Invoke();
+            }
+            else
+            {
+                base.OnBackPressed();
+            }
         }
     }
 }

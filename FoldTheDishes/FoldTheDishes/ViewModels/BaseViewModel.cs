@@ -1,5 +1,4 @@
-﻿using FoldTheDishes.Models;
-using FoldTheDishes.Services;
+﻿using FoldTheDishes.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +10,7 @@ namespace FoldTheDishes.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         public ReminderStore DataStore => DependencyService.Get<ReminderStore>(DependencyFetchTarget.GlobalInstance);
+        public Action CustomBackButtonAction;
 
         bool isBusy = false;
         public bool IsBusy

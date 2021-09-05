@@ -2,34 +2,38 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FoldTheDishes.Views.NewReminderPage"
-             Shell.PresentationMode="ModalAnimated"
-             Title="New Item"
+             Title="{Binding Title}"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
              Visual="Material">
-    
-    <StackLayout Spacing="3" Padding="15">
-        <Entry Text="{Binding Text, Mode=TwoWay}" FontSize="Medium" Placeholder="Title" >
-            <Entry.Keyboard>
-                <Keyboard x:FactoryMethod="Create">
-                    <x:Arguments>
-                        <KeyboardFlags>CapitalizeSentence</KeyboardFlags>
-                    </x:Arguments>
-                </Keyboard>
-            </Entry.Keyboard>
-        </Entry>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <DatePicker Grid.Column="0" Date="{Binding DueDate, Mode=TwoWay}" FontSize="Medium" Margin="0" />
-            <TimePicker Grid.Column="1" Time="{Binding DueTime, Mode=TwoWay}" FontSize="Medium" Margin="0" />
-        </Grid>
-        <StackLayout Orientation="Horizontal">
-            <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
-            <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
+
+    <ContentPage.Content>
+        <StackLayout Spacing="8" Padding="15">
+            <Entry Text="{Binding Text, Mode=TwoWay}" FontSize="Medium" Placeholder="Title" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                        Light={StaticResource SecondaryBackgroundLight}}" >
+                <Entry.Keyboard>
+                    <Keyboard x:FactoryMethod="Create">
+                        <x:Arguments>
+                            <KeyboardFlags>CapitalizeSentence</KeyboardFlags>
+                        </x:Arguments>
+                    </Keyboard>
+                </Entry.Keyboard>
+            </Entry>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <DatePicker Grid.Column="0" Date="{Binding DueDate, Mode=TwoWay}" FontSize="Medium" Margin="0" MinimumDate="{Binding Today}" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                        Light={StaticResource SecondaryBackgroundLight}}"/>
+                <TimePicker Grid.Column="1" Time="{Binding DueTime, Mode=TwoWay}" FontSize="Medium" Margin="0" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                        Light={StaticResource SecondaryBackgroundLight}}"/>
+            </Grid>
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
+                <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
+            </StackLayout>
         </StackLayout>
-    </StackLayout>
-    
+    </ContentPage.Content>
+
 </ContentPage>

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FoldTheDishes.Views.RemindersPage"
              Title="{Binding Title}"
+             xmlns:fontAwesome="clr-namespace:FontAwesome"
              xmlns:converters="clr-namespace:FoldTheDishes.Converters"  
              xmlns:local="clr-namespace:FoldTheDishes.ViewModels"  
              xmlns:model="clr-namespace:FoldTheDishes.Models"  
@@ -10,7 +11,12 @@
              Visual="Material">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding AddReminderCommand}" />
+        <ToolbarItem Command="{Binding AddReminderCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.Plus}" FontFamily="FA-S" Size="Medium" Color="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
+                        Light={StaticResource ColorPrimary}}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>

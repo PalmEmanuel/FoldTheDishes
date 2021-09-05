@@ -17,7 +17,8 @@
 
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15">
-            <Entry Text="{Binding Text, Mode=TwoWay}">
+            <Entry Text="{Binding Text, Mode=TwoWay}" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                        Light={StaticResource SecondaryBackgroundLight}}">
                 <Entry.Keyboard>
                     <Keyboard x:FactoryMethod="Create">
                         <x:Arguments>
@@ -31,13 +32,12 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <DatePicker Grid.Column="0" Date="{Binding DueDate, Mode=TwoWay}"/>
-                <TimePicker Grid.Column="1" Time="{Binding DueTime, Mode=TwoWay}"/>
+                <DatePicker Grid.Column="0" Date="{Binding DueDate, Mode=TwoWay}" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                        Light={StaticResource SecondaryBackgroundLight}}"/>
+                <TimePicker Grid.Column="1" Time="{Binding DueTime, Mode=TwoWay}" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                        Light={StaticResource SecondaryBackgroundLight}}"/>
             </Grid>
-            <StackLayout Orientation="Horizontal" IsVisible="{Binding IsChanged}">
-                <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
-                <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
-            </StackLayout>
+            <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsChanged}"></Button>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

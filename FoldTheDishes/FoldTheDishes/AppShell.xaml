@@ -87,8 +87,7 @@
                                 <VisualState.Setters>
                                     <Setter TargetName="FlyoutItemLabel" 
                                 Property="Label.TextColor" 
-                                Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight},
-                        Light={StaticResource PrimaryTextLight}}"/>
+                                Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, Light={StaticResource PrimaryTextLight}}"/>
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>

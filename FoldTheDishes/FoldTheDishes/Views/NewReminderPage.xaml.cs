@@ -6,8 +6,6 @@ namespace FoldTheDishes.Views
 {
     public partial class NewReminderPage : ContentPage
     {
-        public Reminder Item { get; set; }
-
         public NewReminderPage()
         {
             InitializeComponent();

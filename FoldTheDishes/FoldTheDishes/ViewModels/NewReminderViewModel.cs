@@ -12,17 +12,21 @@ namespace FoldTheDishes.ViewModels
         private DateTime dueDate;
         private TimeSpan dueTime;
 
+        private DateTime today;
+
         INotificationManager notificationManager;
 
         public NewReminderViewModel()
         {
+            Title = "New reminder";
             SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
             this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
 
-            dueDate = DateTime.Now.Date;
-            dueTime = DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(5));
+            today = DateTime.Now;
+            dueDate = today.Date;
+            dueTime = today.TimeOfDay.Add(TimeSpan.FromMinutes(5));
 
             notificationManager = DependencyService.Get<INotificationManager>();
             notificationManager.NotificationReceived += (sender, eventArgs) =>
@@ -56,6 +60,11 @@ namespace FoldTheDishes.ViewModels
         {
             get => dueTime;
             set => SetProperty(ref dueTime, value);
+        }
+        public DateTime Today
+        {
+            get => today;
+            set => SetProperty(ref today, value);
         }
 
         public Command SaveCommand { get; }

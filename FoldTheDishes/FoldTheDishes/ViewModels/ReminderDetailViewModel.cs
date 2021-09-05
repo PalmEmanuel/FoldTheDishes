@@ -2,7 +2,6 @@
 using FoldTheDishes.Services;
 using System;
 using Xamarin.Forms;
-using FoldTheDishes;
 
 namespace FoldTheDishes.ViewModels
 {
@@ -68,16 +67,16 @@ namespace FoldTheDishes.ViewModels
         INotificationManager notificationManager;
 
         public Command SaveCommand { get; }
-        public Command CancelCommand { get; }
         public Command DeleteCommand { get; }
 
         public ReminderDetailViewModel()
         {
-            CancelCommand = new Command(OnCancel);
             DeleteCommand = new Command(OnDelete);
             SaveCommand = new Command(OnSave, ValidateSave);
             this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
+
+            Title = "Edit reminder";
 
             notificationManager = DependencyService.Get<INotificationManager>();
             notificationManager.NotificationReceived += (sender, eventArgs) =>
@@ -85,18 +84,30 @@ namespace FoldTheDishes.ViewModels
                 var evtData = (NotificationEventArgs)eventArgs;
                 System.Diagnostics.Debug.WriteLine($"Received notification click! {evtData.Text}");
             };
+
+            CustomBackButtonAction = async () =>
+            {
+                if (IsChanged)
+                {
+                    var action = await Shell.Current.DisplayAlert("Lose changes?", "Going back without saving will discard your changes to the reminder.",
+                        Constants.CONFIRM_BUTTON_TEXT,
+                        Constants.CANCEL_BUTTON_TEXT);
+                    if (action)
+                    {
+                        await Shell.Current.GoToAsync("..");
+                    }
+                }
+                else
+                {
+                    await Shell.Current.GoToAsync("..");
+                }
+            };
         }
 
         private bool ValidateSave()
         {
             var now = DateTime.Now;
             return !string.IsNullOrWhiteSpace(text) && dueDate.Add(dueTime) >= now && IsChanged;
-        }
-
-        private async void OnCancel()
-        {
-            // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..");
         }
 
         private async void OnDelete()

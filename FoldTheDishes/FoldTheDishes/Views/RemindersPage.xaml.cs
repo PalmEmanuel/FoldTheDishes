@@ -5,18 +5,18 @@ namespace FoldTheDishes.Views
 {
     public partial class RemindersPage : ContentPage
     {
-        RemindersViewModel _viewModel;
+        RemindersViewModel viewModel;
 
         public RemindersPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new RemindersViewModel();
+            BindingContext = viewModel = new RemindersViewModel();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _viewModel.OnAppearing();
+            viewModel.OnAppearing();
         }
     }
 }
