@@ -2,7 +2,8 @@
 <resources>
     <color name="ic_launcher_background">#42a7ed</color>
     <color name="colorPrimary">#42a7ed</color>
-    <color name="colorPrimaryDark">#00499b</color>
-    <color name="colorAccent">#42a7ed</color>
-    <color name="windowBackground">@color/colorAccent</color>
+    <color name="colorPrimaryLight">#7fd8ff</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#fc6471</color>
+    <color name="windowBackground">@color/colorPrimary</color>
 </resources>

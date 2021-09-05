@@ -16,6 +16,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:SeparatorVisibilityConverter x:Key="SeparatorVisibilityConverter"/>
+            <converters:DateStringConverter x:Key="DateStringConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <!--
@@ -36,15 +37,13 @@
                         <StackLayout x:DataType="model:Reminder" Padding="10,5,10,5">
                             <BoxView Style="{StaticResource Separator}"
                                 IsVisible="{Binding ., Converter={StaticResource SeparatorVisibilityConverter}, ConverterParameter={x:Reference Name=RemindersListView}}" />
-                            <Label Text="{Binding Text}" 
-                                LineBreakMode="NoWrap"
+                            <Label Text="{Binding Text}"
+                                LineBreakMode="TailTruncation"
                                 FontSize="16" />
-                            <StackLayout Orientation="Horizontal" >
-                                <Label Text="{Binding DueDate, StringFormat='{0:MMMM dd, yyyy}'}" 
-                                    LineBreakMode="NoWrap"
+                            <StackLayout Orientation="Horizontal" Spacing="0">
+                                <Label Text="{Binding DueDate, Converter={StaticResource DateStringConverter}}"
                                     FontSize="13" />
-                                <Label Text="{Binding DueTime, StringFormat='{}{0:hh\\:mm}'}"
-                                    LineBreakMode="NoWrap"
+                                <Label Text="{Binding DueTime, StringFormat='{} - {0:hh\\:mm}'}"
                                     FontSize="13" />
                             </StackLayout>
                             <StackLayout.GestureRecognizers>

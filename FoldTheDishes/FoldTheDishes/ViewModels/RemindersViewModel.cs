@@ -13,7 +13,7 @@ namespace FoldTheDishes.ViewModels
 {
     public class RemindersViewModel : BaseViewModel
     {
-        private Reminder _selectedReminder;
+        private Reminder selectedReminder;
 
         public ObservableCollection<Reminder> Reminders { get; }
         public Command LoadRemindersCommand { get; }
@@ -83,10 +83,10 @@ namespace FoldTheDishes.ViewModels
 
         public Reminder SelectedReminder
         {
-            get => _selectedReminder;
+            get => selectedReminder;
             set
             {
-                SetProperty(ref _selectedReminder, value);
+                SetProperty(ref selectedReminder, value);
                 OnRemindersSelected(value);
             }
         }

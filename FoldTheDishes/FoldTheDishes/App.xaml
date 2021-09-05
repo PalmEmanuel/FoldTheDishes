@@ -7,11 +7,14 @@
         <Color x:Key="PrimaryBackgroundDark">#303030</Color>
         <Color x:Key="PrimaryBackgroundLight">#ffffff</Color>
         <Color x:Key="SecondaryBackgroundDark">#424242</Color>
-        <Color x:Key="SecondaryBackgroundLight">#7fd8ff</Color>
+        <Color x:Key="SecondaryBackgroundLight">#ffffff</Color>
         <Color x:Key="StatusBarDark">#000000</Color>
         <Color x:Key="StatusBarLight">#00499b</Color>
         <Color x:Key="HeaderBarDark">#212121</Color>
         <Color x:Key="HeaderBarLight">#0078ba</Color>
+
+        <Color x:Key="SelectedBackgroundDark">#535353</Color>
+        <Color x:Key="SelectedBackgroundLight">#fc6471</Color>
 
         <!--<Color x:Key="ColorPrimary">#272635</Color>
         <Color x:Key="ColorPrimaryLight">#4f4e5f</Color>
@@ -21,10 +24,10 @@
         <Color x:Key="ColorPrimaryLight">#7fd8ff</Color>
         <Color x:Key="ColorPrimaryDark">#0078ba</Color>
         <Color x:Key="ColorPrimaryDisabled">#6142a7ed</Color>
-        <!--<Color x:Key="ColorSecondary">#b1e5f2</Color>
-        <Color x:Key="ColorSecondaryLight">#e4ffff</Color>
-        <Color x:Key="ColorSecondaryDark">#80b3bf</Color>
-        <Color x:Key="ColorSecondaryDisabled">#61b1e5f2</Color>-->
+        <Color x:Key="ColorSecondary">#fc6471</Color>
+        <Color x:Key="ColorSecondaryLight">#ff979f</Color>
+        <Color x:Key="ColorSecondaryDark">#c42f46</Color>
+        <Color x:Key="ColorSecondaryDisabled">#61fc6471</Color>
 
         <Color x:Key="PrimaryTextLight">#FFFFFFFF</Color>
         <Color x:Key="PrimaryTextDark">#DE000000</Color>
@@ -35,6 +38,9 @@
 
         <Color x:Key="DividerLight">#1FFFFFFF</Color>
         <Color x:Key="DividerDark">#1F000000</Color>
+
+        <x:String x:Key="IconTrashCan">&#xf1f8;</x:String>
+        <x:String x:Key="IconBulletList">&#xf0ca;</x:String>
         
         <Style x:Key="Separator" TargetType="BoxView">
             <Setter Property="HeightRequest" Value="1" />
@@ -88,8 +94,8 @@
             Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
                         Light={StaticResource PrimaryTextDark}}" />
             <Setter Property="BackgroundColor"
-            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundLight}, 
-                        Light={StaticResource PrimaryBackgroundDark}}" />
+            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, 
+                        Light={StaticResource PrimaryBackgroundLight}}" />
             <Setter Property="PlaceholderColor"
             Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
                         Light={StaticResource PrimaryTextDark}}" />
@@ -109,32 +115,32 @@
 
         <Style TargetType="ContentPage">
             <Setter Property="BackgroundColor"
-            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundLight}, 
-                        Light={StaticResource PrimaryBackgroundDark}}" />
+            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, 
+                        Light={StaticResource PrimaryBackgroundLight}}" />
         </Style>
         
         <Style TargetType="Grid">
             <Setter Property="BackgroundColor"
-            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundLight}, 
-                        Light={StaticResource PrimaryBackgroundDark}}" />
+            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, 
+                        Light={StaticResource PrimaryBackgroundLight}}" />
         </Style>
         
         <Style TargetType="StackLayout">
             <Setter Property="BackgroundColor"
-            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundLight}, 
-                        Light={StaticResource PrimaryBackgroundDark}}" />
+            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, 
+                        Light={StaticResource PrimaryBackgroundLight}}" />
         </Style>
 
         <Style TargetType="CollectionView">
             <Setter Property="BackgroundColor"
-            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundLight}, 
-                        Light={StaticResource PrimaryBackgroundDark}}" />
+            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, 
+                        Light={StaticResource PrimaryBackgroundLight}}" />
         </Style>
 
         <Style TargetType="RefreshView">
             <Setter Property="BackgroundColor"
-            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundLight}, 
-                        Light={StaticResource PrimaryBackgroundDark}}" />
+            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, 
+                        Light={StaticResource PrimaryBackgroundLight}}" />
             <Setter Property="RefreshColor"
             Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
                         Light={StaticResource PrimaryTextDark}}" />
