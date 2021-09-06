@@ -38,9 +38,6 @@
 
         <Color x:Key="DividerLight">#1FFFFFFF</Color>
         <Color x:Key="DividerDark">#1F000000</Color>
-
-        <x:String x:Key="IconTrashCan">&#xf1f8;</x:String>
-        <x:String x:Key="IconBulletList">&#xf0ca;</x:String>
         
         <Style x:Key="Separator" TargetType="BoxView">
             <Setter Property="HeightRequest" Value="1" />

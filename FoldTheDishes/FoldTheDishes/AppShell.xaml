@@ -2,6 +2,7 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:FoldTheDishes.Views"
+       xmlns:fontAwesome="clr-namespace:FontAwesome"
        Title="FoldTheDishes"
        x:Class="FoldTheDishes.AppShell"
        FlyoutBackgroundColor="{AppThemeBinding Dark={StaticResource HeaderBarDark}, 
@@ -104,11 +105,16 @@
     -->
     <FlyoutItem Title="Reminders">
         <FlyoutItem.Icon>
-            <FontImageSource Glyph="{StaticResource IconBulletList}" FontFamily="FA-S"/>
+            <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.ListUl}" FontFamily="FA-S"/>
         </FlyoutItem.Icon>
         <ShellContent Route="RemindersPage" ContentTemplate="{DataTemplate local:RemindersPage}" />
     </FlyoutItem>
-
+    <FlyoutItem Title="Settings">
+        <FlyoutItem.Icon>
+            <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.Cog}" FontFamily="FA-S"/>
+        </FlyoutItem.Icon>
+        <ShellContent Route="RemindersPage" ContentTemplate="{DataTemplate local:RemindersPage}" />
+    </FlyoutItem>
     <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
     <!--<MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
     </MenuItem>-->
@@ -131,9 +137,21 @@
     // https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyout-header-->
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
-            <Image Source="ic_launcher.png" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Aspect="AspectFill"/>
+            <StackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, Light={StaticResource PrimaryBackgroundLight}}">
+                <Image Margin="20" Source="ic_launcher_round.png" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Aspect="AspectFill"/>
+                <Label Padding="0,0,0,20" FontSize="Large" FontAttributes="Bold" Text="fold the dishes" VerticalOptions="Center" HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Dark={StaticResource SecondaryTextLight}, Light={StaticResource SecondaryTextDark}}" />
+                <BoxView Style="{StaticResource Separator}" Margin="20,0,20,30" />
+            </StackLayout>
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>
+
+    <Shell.FlyoutFooterTemplate>
+        <DataTemplate>
+            <Label FontSize="Large" Text="{x:Static fontAwesome:FontAwesomeIcons.Cog}" FontFamily="FA-S" Padding="20" VerticalOptions="Start"
+                       TextColor="{AppThemeBinding Dark={StaticResource SecondaryTextLight}, Light={StaticResource SecondaryTextDark}}" />
+        </DataTemplate>
+    </Shell.FlyoutFooterTemplate>
 
     <!--// ItemTemplate is for ShellItems as displayed in a Flyout
     // https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#define-flyoutitem-appearance
