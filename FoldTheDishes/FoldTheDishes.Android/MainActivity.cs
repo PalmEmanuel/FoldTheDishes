@@ -76,10 +76,17 @@ namespace FoldTheDishes.Droid
             // to cover the both events
 
             // retrieve the current xamarin forms page instance
-            var currentContext = (BaseViewModel)
-            Xamarin.Forms.Application.
-            Current.MainPage.Navigation.
-            NavigationStack.LastOrDefault().BindingContext;
+            BaseViewModel currentContext;
+            try
+            {
+                currentContext = (BaseViewModel)Xamarin.Forms.Application.
+                    Current.MainPage.Navigation.
+                    NavigationStack.LastOrDefault().BindingContext;
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
 
             // check if the page has subscribed to 
             // the custom back button event

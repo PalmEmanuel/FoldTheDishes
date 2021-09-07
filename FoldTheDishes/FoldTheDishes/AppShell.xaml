@@ -3,10 +3,11 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:FoldTheDishes.Views"
        xmlns:fontAwesome="clr-namespace:FontAwesome"
+       xmlns:links="clr-namespace:FoldTheDishes.Services"
        Title="FoldTheDishes"
        x:Class="FoldTheDishes.AppShell"
        FlyoutBackgroundColor="{AppThemeBinding Dark={StaticResource HeaderBarDark}, 
-                        Light={StaticResource SecondaryBackgroundLight}}">
+                        Light={StaticResource HeaderBarLight}}">
 
     <!--
         The overall app visual hierarchy is defined here, along with navigation.
@@ -53,8 +54,8 @@
                             <VisualState x:Name="Normal">
                                 <VisualState.Setters>
                                     <Setter Property="BackgroundColor" 
-                                Value="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark}, 
-                        Light={StaticResource SecondaryBackgroundLight}}" />
+                                Value="{AppThemeBinding Dark={StaticResource HeaderBarDark}, 
+                        Light={StaticResource HeaderBarLight}}" />
                                     <Setter TargetName="FlyoutItemLabel" 
                                 Property="Label.TextColor" 
                                 Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
@@ -109,15 +110,21 @@
         </FlyoutItem.Icon>
         <ShellContent Route="RemindersPage" ContentTemplate="{DataTemplate local:RemindersPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Settings">
+    <!--<FlyoutItem Title="Settings">
         <FlyoutItem.Icon>
             <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.Cog}" FontFamily="FA-S"/>
         </FlyoutItem.Icon>
         <ShellContent Route="RemindersPage" ContentTemplate="{DataTemplate local:RemindersPage}" />
-    </FlyoutItem>
+    </FlyoutItem>-->
     <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
     <!--<MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
     </MenuItem>-->
+
+    <MenuItem Command="{x:Static links:ExternalLinks.TwitterCommand}" Text="Author">
+        <MenuItem.IconImageSource>
+            <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.Twitter}" FontFamily="FA-B"/>
+        </MenuItem.IconImageSource>
+    </MenuItem>
 
     <!--
         TabBar lets you define content that won't show up in a flyout menu. When this content is active
@@ -137,8 +144,8 @@
     // https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyout-header-->
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
-            <StackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, Light={StaticResource PrimaryBackgroundLight}}">
-                <Image Margin="20" Source="ic_launcher_round.png" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Aspect="AspectFill"/>
+            <StackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource HeaderBarDark}, Light={StaticResource HeaderBarLight}}">
+                <Image Margin="50,50,50,30" Source="ic_launcher_round.png" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Aspect="AspectFill"/>
                 <Label Padding="0,0,0,20" FontSize="Large" FontAttributes="Bold" Text="fold the dishes" VerticalOptions="Center" HorizontalOptions="Center"
                        TextColor="{AppThemeBinding Dark={StaticResource SecondaryTextLight}, Light={StaticResource SecondaryTextDark}}" />
                 <BoxView Style="{StaticResource Separator}" Margin="20,0,20,30" />
@@ -146,13 +153,10 @@
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>
 
-    <Shell.FlyoutFooterTemplate>
+    <!--<Shell.FlyoutFooterTemplate>
         <DataTemplate>
-            <Label FontSize="Large" Text="{x:Static fontAwesome:FontAwesomeIcons.Cog}" FontFamily="FA-S" Padding="20" VerticalOptions="Start"
-                       TextColor="{AppThemeBinding Dark={StaticResource SecondaryTextLight}, Light={StaticResource SecondaryTextDark}}" />
         </DataTemplate>
-    </Shell.FlyoutFooterTemplate>
-
+    </Shell.FlyoutFooterTemplate>-->
     <!--// ItemTemplate is for ShellItems as displayed in a Flyout
     // https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#define-flyoutitem-appearance
     <Shell.ItemTemplate>
