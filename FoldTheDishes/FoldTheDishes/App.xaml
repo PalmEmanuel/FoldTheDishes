@@ -86,6 +86,12 @@
                         Light={StaticResource PrimaryTextDark}}" />
         </Style>
 
+        <Style TargetType="CheckBox">
+            <Setter Property="Color"
+            Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
+                        Light={StaticResource PrimaryTextDark}}" />
+        </Style>
+
         <Style TargetType="Entry">
             <Setter Property="TextColor"
             Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 

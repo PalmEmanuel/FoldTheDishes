@@ -18,6 +18,7 @@ namespace FoldTheDishes.ViewModels
         public ObservableCollection<Reminder> Reminders { get; }
         public Command LoadRemindersCommand { get; }
         public Command AddReminderCommand { get; }
+        public Command<Reminder> CheckedChangedCommand { get; }
         public Command<Reminder> ReminderTapped { get; }
 
         INotificationManager notificationManager;
@@ -34,6 +35,7 @@ namespace FoldTheDishes.ViewModels
             ReminderTapped = new Command<Reminder>(OnRemindersSelected);
 
             AddReminderCommand = new Command(OnAddReminder);
+            CheckedChangedCommand = new Command<Reminder>(CheckedChanged);
 
             notificationManager = DependencyService.Get<INotificationManager>();
             notificationManager.NotificationReceived += (sender, eventArgs) =>
@@ -103,6 +105,20 @@ namespace FoldTheDishes.ViewModels
 
             // This will push the ItemDetailPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={reminder.Id}");
+        }
+
+        private void CheckedChanged(Reminder reminder)
+        {
+            reminder.Completed = !reminder.Completed;
+            if (reminder.Completed)
+            {
+                reminder.CompletedDate = DateTime.Now;
+            }
+            else
+            {
+                reminder.CompletedDate = DateTime.MinValue;
+            }
+            DataStore.UpdateItemAsync(reminder);
         }
     }
 }

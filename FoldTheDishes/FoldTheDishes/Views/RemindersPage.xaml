@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
              x:Class="FoldTheDishes.Views.RemindersPage"
              Title="{Binding Title}"
              xmlns:fontAwesome="clr-namespace:FontAwesome"
              xmlns:converters="clr-namespace:FoldTheDishes.Converters"  
              xmlns:local="clr-namespace:FoldTheDishes.ViewModels"  
-             xmlns:model="clr-namespace:FoldTheDishes.Models"  
-             x:Name="BrowseRemindersPage"
+             xmlns:model="clr-namespace:FoldTheDishes.Models"
+             x:Name="ReminderListPage"
              Visual="Material">
 
     <ContentPage.ToolbarItems>
@@ -40,17 +41,32 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout x:DataType="model:Reminder" Padding="10,5,10,5">
-                            <BoxView Style="{StaticResource Separator}"
-                                IsVisible="{Binding ., Converter={StaticResource SeparatorVisibilityConverter}, ConverterParameter={x:Reference Name=RemindersListView}}" />
-                            <Label Text="{Binding Text}"
-                                LineBreakMode="TailTruncation"
-                                FontSize="16" />
-                            <StackLayout Orientation="Horizontal" Spacing="0">
-                                <Label Text="{Binding DueDate, Converter={StaticResource DateStringConverter}}"
-                                    FontSize="13" />
-                                <Label Text="{Binding DueTime, StringFormat='{} - {0:hh\\:mm}'}"
-                                    FontSize="13" />
+                        <StackLayout x:DataType="model:Reminder" Orientation="Horizontal" Padding="10,5,10,5">
+                            <CheckBox VerticalOptions="Center" HorizontalOptions="Center">
+                                <CheckBox.Behaviors>
+                                    <!-- The reference needs to go through the binding context, and does not work like the TapGestureRecognizer further below
+                                    https://docs.microsoft.com/en-us/answers/questions/327979/xamarin-forms-switch-using-eventtocommandbehavior.html
+                                    https://social.msdn.microsoft.com/Forums/en-US/fa8803d5-5a81-42fa-8491-812b04abb88d/behavior-crashes-quotoperation-is-not-valid-due-to-the-current-state-of-the-objectquot?forum=xamarinforms
+                                    -->
+                                    <toolkit:EventToCommandBehavior EventName="CheckedChanged"
+                                                                    x:DataType="model:Reminder"
+                                                                    Command="{Binding Path=BindingContext.CheckedChangedCommand, Source={x:Reference Name=ReminderListPage}}"
+                                                                    CommandParameter="{Binding .}"
+                                                                    />
+                                </CheckBox.Behaviors>
+                            </CheckBox>
+                            <StackLayout>
+                                <BoxView Style="{StaticResource Separator}"
+                                    IsVisible="{Binding ., Converter={StaticResource SeparatorVisibilityConverter}, ConverterParameter={x:Reference Name=RemindersListView}}" />
+                                <Label Text="{Binding Text}"
+                                    LineBreakMode="TailTruncation"
+                                    FontSize="16" />
+                                <StackLayout Orientation="Horizontal" Spacing="0">
+                                    <Label Text="{Binding DueDate, Converter={StaticResource DateStringConverter}}"
+                                        FontSize="13" />
+                                    <Label Text="{Binding DueTime, StringFormat='{} - {0:hh\\:mm}'}"
+                                        FontSize="13" />
+                                </StackLayout>
                             </StackLayout>
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer 

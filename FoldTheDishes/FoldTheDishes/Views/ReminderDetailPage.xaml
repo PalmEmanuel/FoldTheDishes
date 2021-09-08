@@ -3,14 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:fontAwesome="clr-namespace:FontAwesome"
              x:Class="FoldTheDishes.Views.ReminderDetailPage"
+             xmlns:converters="clr-namespace:FoldTheDishes.Converters"
              Title="{Binding Title}"
+             x:Name="ReminderDetail"
              Visual="Material">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:CompletedIconConverter x:Key="CompletedIconConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.ToolbarItems>
+        <!--<ToolbarItem Command="{Binding CompleteCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="{Binding Path=BindingContext.Completed, Source={x:Reference Name=ReminderDetail}, Converter={StaticResource CompletedIconConverter}}"
+                                 FontFamily="FA-R" Size="Medium" Color="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
+                        Light={StaticResource PrimaryTextDark}}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>-->
         <ToolbarItem Command="{Binding DeleteCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.Trash}" FontFamily="FA-S" Size="Medium" Color="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
-                        Light={StaticResource ColorPrimary}}"/>
+                        Light={StaticResource PrimaryTextDark}}"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>

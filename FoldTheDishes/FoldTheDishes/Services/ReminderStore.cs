@@ -50,8 +50,7 @@ namespace FoldTheDishes.Services
 
         public Task<List<Reminder>> GetItemsNotDoneAsync()
         {
-            // SQL queries are also possible
-            return Database.QueryAsync<Reminder>("SELECT * FROM [Reminder] WHERE [Completed] > '1900-01-01'");
+            return Database.QueryAsync<Reminder>("SELECT * FROM [Reminder] WHERE [Completed] = false");
         }
 
         public Task<Reminder> GetItemAsync(int id)

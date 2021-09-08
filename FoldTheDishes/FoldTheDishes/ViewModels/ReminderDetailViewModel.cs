@@ -12,17 +12,19 @@ namespace FoldTheDishes.ViewModels
         private int id;
         private DateTime dueDate;
         private TimeSpan dueTime;
+        private bool completed;
 
         private string originalText;
         private DateTime originalDueDate;
         private TimeSpan originalDueTime;
+        private bool originalCompleted;
 
         private bool isChanged;
         public bool IsChanged
         {
             get
             {
-                IsChanged = text != originalText || dueDate != originalDueDate || dueTime != originalDueTime;
+                IsChanged = text != originalText || dueDate != originalDueDate || dueTime != originalDueTime || completed != originalCompleted;
                 return isChanged;
             }
             set => SetProperty(ref isChanged, value);
@@ -44,10 +46,7 @@ namespace FoldTheDishes.ViewModels
         public string Text
         {
             get => text;
-            set
-            {
-                SetProperty(ref text, value);
-            }
+            set => SetProperty(ref text, value);
         }
 
         public DateTime DueDate
@@ -62,12 +61,17 @@ namespace FoldTheDishes.ViewModels
             set => SetProperty(ref dueTime, value);
         }
 
-        public DateTime Created { get; set; }
+        public bool Completed
+        {
+            get => completed;
+            set => SetProperty(ref completed, value);
+        }
 
         INotificationManager notificationManager;
 
         public Command SaveCommand { get; }
         public Command DeleteCommand { get; }
+        public Command CompleteCommand { get; }
 
         public ReminderDetailViewModel()
         {
@@ -75,6 +79,7 @@ namespace FoldTheDishes.ViewModels
             SaveCommand = new Command(OnSave, ValidateSave);
             this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
+            CompleteCommand = new Command(OnComplete);
 
             Title = "Edit reminder";
 
@@ -110,6 +115,11 @@ namespace FoldTheDishes.ViewModels
             return !string.IsNullOrWhiteSpace(text) && dueDate.Add(dueTime) >= now && IsChanged;
         }
 
+        private void OnComplete()
+        {
+            Completed = !Completed;
+        }
+
         private async void OnDelete()
         {
             var action = await Shell.Current.DisplayAlert("Delete reminder?", "This will permanently remove the reminder from your list." ,
@@ -132,7 +142,8 @@ namespace FoldTheDishes.ViewModels
                 Id = Id,
                 Text = Text,
                 DueDate = DueDate,
-                DueTime = DueTime
+                DueTime = DueTime,
+                Completed = Completed
             };
 
             await DataStore.UpdateItemAsync(newReminder);
@@ -151,6 +162,7 @@ namespace FoldTheDishes.ViewModels
                 Text = originalText = reminder.Text;
                 DueDate = originalDueDate = reminder.DueDate;
                 DueTime = originalDueTime = reminder.DueTime;
+                Completed = originalCompleted = reminder.Completed;
             }
             catch (Exception)
             {

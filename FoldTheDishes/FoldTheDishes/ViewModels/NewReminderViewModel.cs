@@ -84,8 +84,9 @@ namespace FoldTheDishes.ViewModels
                 Text = Text,
                 DueDate = DueDate,
                 DueTime = DueTime,
-                Created = DateTime.Now,
-                Completed = DateTime.MinValue
+                CreatedDate = DateTime.Now,
+                Completed = false,
+                CompletedDate = DateTime.MinValue
             };
 
             await DataStore.AddItemAsync(newReminder);

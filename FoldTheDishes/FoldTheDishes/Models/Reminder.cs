@@ -11,7 +11,8 @@ namespace FoldTheDishes.Models
         public DateTime DueDate { get; set; }
         public TimeSpan DueTime { get; set; }
         public string Text { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Completed { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public bool Completed { get; set; }
+        public DateTime CompletedDate { get; set; }
     }
 }
