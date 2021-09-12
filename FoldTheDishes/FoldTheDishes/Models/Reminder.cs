@@ -10,7 +10,8 @@ namespace FoldTheDishes.Models
         public int Id { get; set; }
         public DateTime DueDate { get; set; }
         public TimeSpan DueTime { get; set; }
-        public string Text { get; set; }
+        public string Title { get; set; }
+        public string Notes { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool Completed { get; set; }
         public DateTime CompletedDate { get; set; }

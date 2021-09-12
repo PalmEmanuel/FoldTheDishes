@@ -1,5 +1,4 @@
-﻿using FoldTheDishes.Models;
-using FoldTheDishes.ViewModels;
+﻿using FoldTheDishes.ViewModels;
 using Xamarin.Forms;
 
 namespace FoldTheDishes.Views

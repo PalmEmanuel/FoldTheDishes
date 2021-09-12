@@ -140,7 +140,7 @@ namespace FoldTheDishes.ViewModels
             Reminder newReminder = new Reminder()
             {
                 Id = Id,
-                Text = Text,
+                Title = Text,
                 DueDate = DueDate,
                 DueTime = DueTime,
                 Completed = Completed
@@ -159,7 +159,7 @@ namespace FoldTheDishes.ViewModels
             {
                 var reminder = await DataStore.GetItemAsync(itemId);
                 Id = reminder.Id;
-                Text = originalText = reminder.Text;
+                Text = originalText = reminder.Title;
                 DueDate = originalDueDate = reminder.DueDate;
                 DueTime = originalDueTime = reminder.DueTime;
                 Completed = originalCompleted = reminder.Completed;

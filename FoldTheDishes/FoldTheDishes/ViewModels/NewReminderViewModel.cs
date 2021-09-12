@@ -81,7 +81,7 @@ namespace FoldTheDishes.ViewModels
             Reminder newReminder = new Reminder()
             {
                 Id = 0,
-                Text = Text,
+                Title = Text,
                 DueDate = DueDate,
                 DueTime = DueTime,
                 CreatedDate = DateTime.Now,
@@ -90,7 +90,7 @@ namespace FoldTheDishes.ViewModels
             };
 
             await DataStore.AddItemAsync(newReminder);
-            notificationManager.SendNotification(newReminder.Id, newReminder.Text, newReminder.DueDate.Add(newReminder.DueTime));
+            notificationManager.SendNotification(newReminder.Id, newReminder.Title, newReminder.DueDate.Add(newReminder.DueTime));
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");

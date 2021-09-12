@@ -15,7 +15,8 @@ namespace FoldTheDishes.ViewModels
     {
         private Reminder selectedReminder;
 
-        public ObservableCollection<Reminder> Reminders { get; }
+        public ObservableCollection<Reminder> UncompletedReminders { get; }
+        public ObservableCollection<Reminder> CompletedReminders { get; }
         public Command LoadRemindersCommand { get; }
         public Command AddReminderCommand { get; }
         public Command<Reminder> CheckedChangedCommand { get; }
@@ -29,28 +30,28 @@ namespace FoldTheDishes.ViewModels
         public RemindersViewModel()
         {
             Title = "Reminders";
-            Reminders = new ObservableCollection<Reminder>();
+            UncompletedReminders = new ObservableCollection<Reminder>();
+            CompletedReminders = new ObservableCollection<Reminder>();
             LoadRemindersCommand = new Command(async () => await ExecuteLoadRemindersCommand());
 
             ReminderTapped = new Command<Reminder>(OnRemindersSelected);
 
             AddReminderCommand = new Command(OnAddReminder);
-            CheckedChangedCommand = new Command<Reminder>(CheckedChanged);
+            CheckedChangedCommand = new Command<Reminder>(async (r) => await CheckedChanged(r));
 
             notificationManager = DependencyService.Get<INotificationManager>();
             notificationManager.NotificationReceived += (sender, eventArgs) =>
             {
                 var evtData = (NotificationEventArgs)eventArgs;
-                ShowNotification(evtData.Text);
+                ShowNotification(evtData.Id);
             };
         }
 
-        void ShowNotification(string title)
+        void ShowNotification(int id)
         {
-            Device.BeginInvokeOnMainThread(() =>
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                //notificationManager.SendNotification(title, message);
-                // When user clicks notification, what do?
+                await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={id}");
             });
         }
 
@@ -60,11 +61,20 @@ namespace FoldTheDishes.ViewModels
 
             try
             {
-                Reminders.Clear();
+                UncompletedReminders.Clear();
+                CompletedReminders.Clear();
                 var reminders = (await DataStore.GetItemsAsync()).OrderBy(r => r.DueDate.Add(r.DueTime));
-                foreach (var item in reminders)
+                foreach (var reminder in reminders)
                 {
-                    Reminders.Add(item);
+                    switch (reminder.Completed)
+                    {
+                        case false:
+                            if (!UncompletedReminders.Any(r => r.Id == reminder.Id)) { UncompletedReminders.Add(reminder); }
+                            break;
+                        case true:
+                            if (!CompletedReminders.Any(r => r.Id == reminder.Id)) { CompletedReminders.Add(reminder); }
+                            break;
+                    }
                 }
             }
             catch (Exception ex)
@@ -107,9 +117,9 @@ namespace FoldTheDishes.ViewModels
             await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={reminder.Id}");
         }
 
-        private void CheckedChanged(Reminder reminder)
+        private async Task CheckedChanged(Reminder reminder)
         {
-            reminder.Completed = !reminder.Completed;
+            // Value has already changed because of the two-way binding
             if (reminder.Completed)
             {
                 reminder.CompletedDate = DateTime.Now;
@@ -118,7 +128,58 @@ namespace FoldTheDishes.ViewModels
             {
                 reminder.CompletedDate = DateTime.MinValue;
             }
-            DataStore.UpdateItemAsync(reminder);
+
+            await DataStore.UpdateItemAsync(reminder);
+
+            if (reminder.Completed)
+            {
+                //// If the list does not contain the reminder
+                //if (!CompletedReminders.Any(r => r.Id == reminder.Id))
+                //{
+                //    try
+                //    {
+                //        // Find the closest date in list, insert at that index
+                //        // This ensures a sorted list without sorting it, which is more complex due to bindings and two pages in tabbedpagev
+                //        var orderedList = CompletedReminders.OrderBy(r => reminder.DueDate.Add(reminder.DueTime) - r.DueDate.Add(r.DueTime));
+                //        int index = CompletedReminders.IndexOf(orderedList.First(r => r.DueDate.Add(r.DueTime) < reminder.DueDate.Add(reminder.DueTime)));
+                //        CompletedReminders.Insert(index, reminder);
+                //    }
+                //    catch (Exception)
+                //    {
+                //        CompletedReminders.Add(reminder);
+                //    }
+                //}
+                UncompletedReminders.Remove(reminder);
+            }
+            else
+            {
+                //if (!UncompletedReminders.Any(r => r.Id == reminder.Id))
+                //{
+                //    try
+                //    {
+                //        // Find the closest date in list, insert at that index
+                //        // This ensures a sorted list without sorting it, which is more complex due to bindings and two pages in tabbedpagev
+                //        var orderedList = UncompletedReminders.OrderBy(r => reminder.DueDate.Add(reminder.DueTime) - r.DueDate.Add(r.DueTime));
+                //        int index = UncompletedReminders.IndexOf(orderedList.First(r => r.DueDate.Add(r.DueTime) < reminder.DueDate.Add(reminder.DueTime)));
+                //        UncompletedReminders.Insert(index, reminder);
+                //    }
+                //    catch (Exception)
+                //    {
+                //        UncompletedReminders.Add(reminder);
+                //    }
+                //}
+                CompletedReminders.Remove(reminder);
+            }
+
+            // Avoid an infinite loop of the two pages in the tabbedpage invoking each other's updates
+            // ie sort update when it's in view
+            // CurrentPage is set when navigating between pages
+            //if ((CurrentPage == "Completed" && reminder.Completed) ||
+            //    (CurrentPage == "Uncompleted" && !reminder.Completed))
+            //{
+            //    CompletedReminders.Sort((a, b) => a.DueDate.Add(a.DueTime).CompareTo(b.DueDate.Add(b.DueTime)));
+            //    UncompletedReminders.Sort((a, b) => a.DueDate.Add(a.DueTime).CompareTo(b.DueDate.Add(b.DueTime)));
+            //}
         }
     }
 }

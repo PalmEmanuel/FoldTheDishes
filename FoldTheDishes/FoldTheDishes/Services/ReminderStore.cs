@@ -53,6 +53,11 @@ namespace FoldTheDishes.Services
             return Database.QueryAsync<Reminder>("SELECT * FROM [Reminder] WHERE [Completed] = false");
         }
 
+        public Task<List<Reminder>> GetItemsDoneAsync()
+        {
+            return Database.QueryAsync<Reminder>("SELECT * FROM [Reminder] WHERE [Completed] = true");
+        }
+
         public Task<Reminder> GetItemAsync(int id)
         {
             return Database.Table<Reminder>().Where(i => i.Id == id).FirstOrDefaultAsync();
