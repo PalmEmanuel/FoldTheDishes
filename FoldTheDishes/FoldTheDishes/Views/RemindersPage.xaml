@@ -13,7 +13,7 @@
             BarBackgroundColor="{AppThemeBinding Dark={StaticResource HeaderBarDark}, 
                             Light={StaticResource HeaderBarLight}}"
             BarTextColor="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
-                            Light={StaticResource PrimaryTextDark}}">
+                            Light={StaticResource PrimaryTextLight}}">
 
     <TabbedPage.ToolbarItems>
         <ToolbarItem Command="{Binding AddReminderCommand}">
@@ -31,7 +31,7 @@
         </ResourceDictionary>
     </TabbedPage.Resources>
 
-    <ContentPage Title="Uncompleted">
+    <ContentPage Title="To-Do">
         <!--
           x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
           https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
@@ -64,7 +64,7 @@
                                 <StackLayout>
                                     <BoxView Style="{StaticResource Separator}"
                                         IsVisible="{Binding ., Converter={StaticResource SeparatorVisibilityConverter}, ConverterParameter={x:Reference Name=UncompletedRemindersListView}}" />
-                                    <Label Text="{Binding Text}"
+                                    <Label Text="{Binding Title}"
                                         LineBreakMode="TailTruncation"
                                         FontSize="16" />
                                     <StackLayout Orientation="Horizontal" Spacing="0">
@@ -89,7 +89,7 @@
         </RefreshView>
     </ContentPage>
 
-    <ContentPage Title="Completed">
+    <ContentPage Title="Done">
         <!--
           x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
           https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
@@ -122,7 +122,7 @@
                                 <StackLayout>
                                     <BoxView Style="{StaticResource Separator}"
                                         IsVisible="{Binding ., Converter={StaticResource SeparatorVisibilityConverter}, ConverterParameter={x:Reference Name=CompletedRemindersListView}}" />
-                                    <Label Text="{Binding Text}"
+                                    <Label Text="{Binding Title}"
                                         LineBreakMode="TailTruncation"
                                         FontSize="16" />
                                     <StackLayout Orientation="Horizontal" Spacing="0">

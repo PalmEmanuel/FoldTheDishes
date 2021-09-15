@@ -103,7 +103,7 @@ namespace FoldTheDishes.Services
 
         void CreateNotificationChannel()
         {
-            manager = (NotificationManager)AndroidApp.Context.GetSystemService(AndroidApp.NotificationService);
+            manager = (NotificationManager)AndroidApp.Context.GetSystemService(Context.NotificationService);
 
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {

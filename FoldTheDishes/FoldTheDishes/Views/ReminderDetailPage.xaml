@@ -4,6 +4,7 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome"
              x:Class="FoldTheDishes.Views.ReminderDetailPage"
              xmlns:converters="clr-namespace:FoldTheDishes.Converters"
+             xmlns:behaviors="clr-namespace:FoldTheDishes.Behaviors"
              Title="{Binding Title}"
              x:Name="ReminderDetail"
              Visual="Material">
@@ -11,6 +12,8 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:CompletedIconConverter x:Key="CompletedIconConverter"/>
+            <converters:CompletedStringConverter x:Key="CompletedStringConverter"/>
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -32,27 +35,75 @@
 
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15">
-            <Entry Text="{Binding Text, Mode=TwoWay}" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
-                        Light={StaticResource SecondaryBackgroundLight}}">
-                <Entry.Keyboard>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                <Entry Text="{Binding TitleText, Mode=TwoWay}" Placeholder="Title" HorizontalOptions="FillAndExpand"
+                       IsEnabled="{Binding Completed, Converter={StaticResource InverseBooleanConverter}}">
+                    <Entry.Behaviors>
+                        <behaviors:EntryNotEmptyValidation/>
+                    </Entry.Behaviors>
+                    <Entry.Keyboard>
+                        <Keyboard x:FactoryMethod="Create">
+                            <x:Arguments>
+                                <KeyboardFlags>CapitalizeSentence</KeyboardFlags>
+                            </x:Arguments>
+                        </Keyboard>
+                    </Entry.Keyboard>
+                </Entry>
+                <Frame HorizontalOptions="End" CornerRadius="5" Padding="0" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                                Light={StaticResource SecondaryBackgroundLight}}">
+                    <Grid RowDefinitions="30, 35" RowSpacing="0" HorizontalOptions="End" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                                Light={StaticResource SecondaryBackgroundLight}}">
+                        <CheckBox Grid.Row="1" Margin="6, -10, 0, 0" HorizontalOptions="Center" IsChecked="{Binding Completed, Mode=TwoWay}"/>
+                        <Label Text="{Binding Completed, Converter={StaticResource CompletedStringConverter}}"
+                               Grid.Row="0"
+                               Margin="12, 10, 0, 0"
+                               FontSize="11"/>
+                    </Grid>
+                </Frame>
+            </StackLayout>
+            <Editor Text="{Binding Notes, Mode=TwoWay}" Placeholder="Notes" IsEnabled="{Binding Completed, Converter={StaticResource InverseBooleanConverter}}">
+                <Editor.Keyboard>
                     <Keyboard x:FactoryMethod="Create">
                         <x:Arguments>
                             <KeyboardFlags>CapitalizeSentence</KeyboardFlags>
                         </x:Arguments>
                     </Keyboard>
-                </Entry.Keyboard>
-            </Entry>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <DatePicker Grid.Column="0" Date="{Binding DueDate, Mode=TwoWay}" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
-                        Light={StaticResource SecondaryBackgroundLight}}"/>
-                <TimePicker Grid.Column="1" Time="{Binding DueTime, Mode=TwoWay}" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
-                        Light={StaticResource SecondaryBackgroundLight}}"/>
-            </Grid>
-            <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsChanged}"></Button>
+                </Editor.Keyboard>
+            </Editor>
+            <StackLayout Orientation="Horizontal">
+                <Grid RowDefinitions="30, 35" Margin="0" RowSpacing="0" HorizontalOptions="FillAndExpand">
+                    <DatePicker x:Name="DatePicker" IsEnabled="{Binding Completed, Converter={StaticResource InverseBooleanConverter}}"
+                                Date="{Binding DueDate, Mode=TwoWay}"
+                                Format="MMMM dd, yyyy"
+                                Grid.Row="1"
+                                Margin="0, -30, 0, 0" HorizontalOptions="FillAndExpand">
+                        <DatePicker.Behaviors>
+                            <behaviors:DateValidationBehavior DateLabel="{x:Reference DateLabel}" TimeLabel="{x:Reference TimeLabel}" TimePicker="{x:Reference TimePicker}"/>
+                        </DatePicker.Behaviors>
+                    </DatePicker>
+                    <Label x:Name="DateLabel"
+                           Text="Date"
+                           Grid.Row="0"
+                           Margin="12, 10, 0, 0"
+                           FontSize="11"/>
+                </Grid>
+                <Grid RowDefinitions="30, 35" Margin="0" RowSpacing="0" HorizontalOptions="FillAndExpand">
+                    <TimePicker x:Name="TimePicker" Time="{Binding DueTime, Mode=TwoWay}" IsEnabled="{Binding Completed, Converter={StaticResource InverseBooleanConverter}}"
+                                Grid.Row="1"
+                                Margin="0, -30, 0, 0"
+                                HorizontalOptions="FillAndExpand">
+                        <TimePicker.Behaviors>
+                            <behaviors:TimeValidationBehavior DateLabel="{x:Reference DateLabel}" TimeLabel="{x:Reference TimeLabel}" DatePicker="{x:Reference DatePicker}"/>
+                        </TimePicker.Behaviors>
+                    </TimePicker>
+                    <Label x:Name="TimeLabel"
+                           Text="Time"
+                           Grid.Row="0"
+                           Margin="12, 10, 0, 0"
+                           FontSize="11"/>
+                </Grid>
+            </StackLayout>
+            <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding CanSave}"></Button>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -131,6 +131,7 @@ namespace FoldTheDishes.ViewModels
 
             await DataStore.UpdateItemAsync(reminder);
 
+            // This needs some work, currently the list updates from db when tab is changed
             if (reminder.Completed)
             {
                 //// If the list does not contain the reminder
@@ -149,6 +150,7 @@ namespace FoldTheDishes.ViewModels
                 //        CompletedReminders.Add(reminder);
                 //    }
                 //}
+                notificationManager.DeleteNotification(reminder.Id);
                 UncompletedReminders.Remove(reminder);
             }
             else
@@ -168,6 +170,7 @@ namespace FoldTheDishes.ViewModels
                 //        UncompletedReminders.Add(reminder);
                 //    }
                 //}
+                notificationManager.SendNotification(reminder.Id, reminder.Title, reminder.DueDate.Add(reminder.DueTime));
                 CompletedReminders.Remove(reminder);
             }
 

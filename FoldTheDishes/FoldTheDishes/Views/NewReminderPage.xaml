@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FoldTheDishes.Views.NewReminderPage"
+             xmlns:behaviors="clr-namespace:FoldTheDishes.Behaviors"
              Title="{Binding Title}"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
@@ -9,8 +10,10 @@
 
     <ContentPage.Content>
         <StackLayout Spacing="8" Padding="15">
-            <Entry Text="{Binding Text, Mode=TwoWay}" FontSize="Medium" Placeholder="Title" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
-                        Light={StaticResource SecondaryBackgroundLight}}" >
+            <Entry Text="{Binding TitleText, Mode=TwoWay}" FontSize="Medium" Placeholder="Title" >
+                <Entry.Behaviors>
+                    <behaviors:EntryNotEmptyValidation/>
+                </Entry.Behaviors>
                 <Entry.Keyboard>
                     <Keyboard x:FactoryMethod="Create">
                         <x:Arguments>
@@ -19,20 +22,50 @@
                     </Keyboard>
                 </Entry.Keyboard>
             </Entry>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <DatePicker Grid.Column="0" Date="{Binding DueDate, Mode=TwoWay}" FontSize="Medium" Margin="0" MinimumDate="{Binding Today}" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
-                        Light={StaticResource SecondaryBackgroundLight}}"/>
-                <TimePicker Grid.Column="1" Time="{Binding DueTime, Mode=TwoWay}" FontSize="Medium" Margin="0" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
-                        Light={StaticResource SecondaryBackgroundLight}}"/>
-            </Grid>
+            <Editor Text="{Binding Notes, Mode=TwoWay}" FontSize="Medium" Placeholder="Notes" >
+                <Editor.Keyboard>
+                    <Keyboard x:FactoryMethod="Create">
+                        <x:Arguments>
+                            <KeyboardFlags>CapitalizeSentence</KeyboardFlags>
+                        </x:Arguments>
+                    </Keyboard>
+                </Editor.Keyboard>
+            </Editor>
             <StackLayout Orientation="Horizontal">
-                <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
-                <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
+                <Grid RowDefinitions="30, 35" Margin="0" RowSpacing="0" HorizontalOptions="FillAndExpand">
+                    <DatePicker x:Name="DatePicker"
+                                MinimumDate="{Binding Today}"
+                                Date="{Binding DueDate, Mode=TwoWay}"
+                                Format="MMMM dd, yyyy"
+                                Grid.Row="1"
+                                Margin="0, -30, 0, 0" HorizontalOptions="FillAndExpand">
+                        <DatePicker.Behaviors>
+                            <behaviors:DateValidationBehavior DateLabel="{x:Reference DateLabel}" TimeLabel="{x:Reference TimeLabel}" TimePicker="{x:Reference TimePicker}"/>
+                        </DatePicker.Behaviors>
+                    </DatePicker>
+                    <Label x:Name="DateLabel"
+                           Text="Date"
+                           Grid.Row="0"
+                           Margin="12, 10, 0, 0"
+                           FontSize="11"/>
+                </Grid>
+                <Grid RowDefinitions="30, 35" Margin="0" RowSpacing="0" HorizontalOptions="FillAndExpand">
+                    <TimePicker x:Name="TimePicker" Time="{Binding DueTime, Mode=TwoWay}"
+                                Grid.Row="1"
+                                Margin="0, -30, 0, 0"
+                                HorizontalOptions="FillAndExpand">
+                        <TimePicker.Behaviors>
+                            <behaviors:TimeValidationBehavior DateLabel="{x:Reference DateLabel}" TimeLabel="{x:Reference TimeLabel}" DatePicker="{x:Reference DatePicker}"/>
+                        </TimePicker.Behaviors>
+                    </TimePicker>
+                    <Label x:Name="TimeLabel"
+                           Text="Time"
+                           Grid.Row="0"
+                           Margin="12, 10, 0, 0"
+                           FontSize="11"/>
+                </Grid>
             </StackLayout>
+            <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
         </StackLayout>
     </ContentPage.Content>
 

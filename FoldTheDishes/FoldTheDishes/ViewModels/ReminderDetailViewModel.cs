@@ -1,5 +1,6 @@
 ﻿using FoldTheDishes.Models;
 using FoldTheDishes.Services;
+using FoldTheDishes.Views;
 using System;
 using Xamarin.Forms;
 
@@ -8,26 +9,38 @@ namespace FoldTheDishes.ViewModels
     [QueryProperty(nameof(Id), nameof(Id))]
     public class ReminderDetailViewModel : BaseViewModel
     {
-        private string text;
+        private string title;
+        private string notes;
         private int id;
         private DateTime dueDate;
         private TimeSpan dueTime;
         private bool completed;
 
-        private string originalText;
+        private string originalTitle;
+        private string originalNotes;
         private DateTime originalDueDate;
         private TimeSpan originalDueTime;
         private bool originalCompleted;
 
-        private bool isChanged;
-        public bool IsChanged
+        private bool canSave;
+        public bool CanSave
         {
             get
             {
-                IsChanged = text != originalText || dueDate != originalDueDate || dueTime != originalDueTime || completed != originalCompleted;
-                return isChanged;
+                WasChanged();
+                return canSave;
             }
-            set => SetProperty(ref isChanged, value);
+            set => SetProperty(ref canSave, value);
+        }
+
+        private void WasChanged()
+        {
+            CanSave = title != originalTitle ||
+                notes != originalNotes ||
+                dueDate != originalDueDate ||
+                dueTime != originalDueTime ||
+                completed != originalCompleted ||
+                (completed && !originalCompleted);
         }
 
         public int Id
@@ -43,10 +56,16 @@ namespace FoldTheDishes.ViewModels
             }
         }
 
-        public string Text
+        public string TitleText
         {
-            get => text;
-            set => SetProperty(ref text, value);
+            get => title;
+            set => SetProperty(ref title, value);
+        }
+
+        public string Notes
+        {
+            get => notes;
+            set => SetProperty(ref notes, value);
         }
 
         public DateTime DueDate
@@ -64,7 +83,11 @@ namespace FoldTheDishes.ViewModels
         public bool Completed
         {
             get => completed;
-            set => SetProperty(ref completed, value);
+            set
+            {
+                SetProperty(ref completed, value);
+                WasChanged();
+            }
         }
 
         INotificationManager notificationManager;
@@ -82,17 +105,17 @@ namespace FoldTheDishes.ViewModels
             CompleteCommand = new Command(OnComplete);
 
             Title = "Edit reminder";
-
+            
             notificationManager = DependencyService.Get<INotificationManager>();
             notificationManager.NotificationReceived += (sender, eventArgs) =>
             {
                 var evtData = (NotificationEventArgs)eventArgs;
-                System.Diagnostics.Debug.WriteLine($"Received notification click! {evtData.Text}");
+                ShowNotification(evtData.Id);
             };
 
             CustomBackButtonAction = async () =>
             {
-                if (IsChanged)
+                if (CanSave)
                 {
                     var action = await Shell.Current.DisplayAlert("Lose changes?", "Going back without saving will discard your changes to the reminder.",
                         Constants.CONFIRM_BUTTON_TEXT,
@@ -109,10 +132,18 @@ namespace FoldTheDishes.ViewModels
             };
         }
 
+        void ShowNotification(int id)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={id}");
+            });
+        }
+
         private bool ValidateSave()
         {
             var now = DateTime.Now;
-            return !string.IsNullOrWhiteSpace(text) && dueDate.Add(dueTime) >= now && IsChanged;
+            return !string.IsNullOrWhiteSpace(title) && dueDate.Add(dueTime) >= now && CanSave;
         }
 
         private void OnComplete()
@@ -140,17 +171,34 @@ namespace FoldTheDishes.ViewModels
             Reminder newReminder = new Reminder()
             {
                 Id = Id,
-                Title = Text,
+                Title = TitleText,
+                Notes = Notes,
                 DueDate = DueDate,
                 DueTime = DueTime,
                 Completed = Completed
             };
 
-            await DataStore.UpdateItemAsync(newReminder);
-            // Replaces the old scheduled notification
-            notificationManager.SendNotification(Id, Text, DueDate.Add(DueTime));
-            // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..");
+            bool proceed = true;
+            bool inFuture = DueDate.Add(DueTime) > DateTime.Now;
+
+            if (Completed && inFuture)
+            {
+                proceed = await Shell.Current.DisplayAlert("You will not be reminded!", "The reminder is marked as completed, and you will not be reminded when the date is reached.",
+                    Constants.CONFIRM_BUTTON_TEXT,
+                    Constants.CANCEL_BUTTON_TEXT);
+            }
+            else if (inFuture)
+            {
+                // Replaces the old scheduled notification
+                notificationManager.SendNotification(Id, TitleText, DueDate.Add(DueTime));
+            }
+
+            if (proceed)
+            {
+                await DataStore.UpdateItemAsync(newReminder);
+                // This will pop the current page off the navigation stack
+                await Shell.Current.GoToAsync("..");
+            }
         }
 
         public async void LoadItemId(int itemId)
@@ -159,14 +207,15 @@ namespace FoldTheDishes.ViewModels
             {
                 var reminder = await DataStore.GetItemAsync(itemId);
                 Id = reminder.Id;
-                Text = originalText = reminder.Title;
+                TitleText = originalTitle = reminder.Title;
+                Notes = originalNotes = reminder.Notes;
                 DueDate = originalDueDate = reminder.DueDate;
                 DueTime = originalDueTime = reminder.DueTime;
                 Completed = originalCompleted = reminder.Completed;
             }
             catch (Exception)
             {
-                System.Diagnostics.Debug.WriteLine("Failed to Load Item");
+                System.Diagnostics.Debug.WriteLine("Failed to load reminder");
             }
         }
     }

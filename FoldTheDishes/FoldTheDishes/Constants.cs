@@ -10,5 +10,7 @@ namespace FoldTheDishes
 
         public const string CONFIRM_BUTTON_TEXT = "OK";
         public const string CANCEL_BUTTON_TEXT = "Cancel";
+        public const string YES_TEXT = "Yes";
+        public const string NO_TEXT = "No";
     }
 }

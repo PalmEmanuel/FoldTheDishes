@@ -18,5 +18,9 @@ namespace FoldTheDishes
                 collection.Move(collection.IndexOf(sortableList[i]), i);
             }
         }
+        public static DateTime TrimToMinutes(this DateTime datetime)
+        {
+            return new DateTime(datetime.Year, datetime.Month, datetime.Day, datetime.Hour, datetime.Minute, 0);
+        }
     }
 }

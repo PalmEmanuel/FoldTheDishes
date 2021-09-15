@@ -7,7 +7,7 @@
        Title="FoldTheDishes"
        x:Class="FoldTheDishes.AppShell"
        FlyoutBackgroundColor="{AppThemeBinding Dark={StaticResource HeaderBarDark}, 
-                        Light={StaticResource HeaderBarLight}}">
+                        Light={StaticResource SecondaryBackgroundLight}}">
 
     <!--
         The overall app visual hierarchy is defined here, along with navigation.

@@ -1,5 +1,6 @@
 ﻿using FoldTheDishes.Models;
 using FoldTheDishes.Services;
+using FoldTheDishes.Views;
 using System;
 using Xamarin.Forms;
 
@@ -7,49 +8,55 @@ namespace FoldTheDishes.ViewModels
 {
     public class NewReminderViewModel : BaseViewModel
     {
-        private string text;
-        private string description;
+        private string title;
+        private string notes;
         private DateTime dueDate;
         private TimeSpan dueTime;
-
-        private DateTime today;
 
         INotificationManager notificationManager;
 
         public NewReminderViewModel()
         {
-            Title = "New reminder";
+            base.Title = "New reminder";
             SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
             this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
 
-            today = DateTime.Now;
-            dueDate = today.Date;
-            dueTime = today.TimeOfDay.Add(TimeSpan.FromMinutes(5));
+            Today = DateTime.Now.TrimToMinutes();
+            dueDate = Today.Date;
+            dueTime = Today.TimeOfDay.Add(TimeSpan.FromMinutes(5));
 
             notificationManager = DependencyService.Get<INotificationManager>();
             notificationManager.NotificationReceived += (sender, eventArgs) =>
             {
                 var evtData = (NotificationEventArgs)eventArgs;
-                System.Diagnostics.Debug.WriteLine($"Received notification click! {evtData.Text}");
+                ShowNotification(evtData.Id);
             };
+        }
+
+        void ShowNotification(int id)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={id}");
+            });
         }
 
         private bool ValidateSave()
         {
-            return !string.IsNullOrWhiteSpace(text);
+            return !string.IsNullOrWhiteSpace(title);
         }
 
-        public string Text
+        public string TitleText
         {
-            get => text;
-            set => SetProperty(ref text, value);
+            get => title;
+            set => SetProperty(ref title, value);
         }
-        public string Description
+        public string Notes
         {
-            get => description;
-            set => SetProperty(ref description, value);
+            get => notes;
+            set => SetProperty(ref notes, value);
         }
         public DateTime DueDate
         {
@@ -61,11 +68,7 @@ namespace FoldTheDishes.ViewModels
             get => dueTime;
             set => SetProperty(ref dueTime, value);
         }
-        public DateTime Today
-        {
-            get => today;
-            set => SetProperty(ref today, value);
-        }
+        public DateTime Today { get; }
 
         public Command SaveCommand { get; }
         public Command CancelCommand { get; }
@@ -81,7 +84,8 @@ namespace FoldTheDishes.ViewModels
             Reminder newReminder = new Reminder()
             {
                 Id = 0,
-                Title = Text,
+                Title = TitleText,
+                Notes = Notes,
                 DueDate = DueDate,
                 DueTime = DueTime,
                 CreatedDate = DateTime.Now,
