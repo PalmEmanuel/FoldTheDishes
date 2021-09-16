@@ -4,6 +4,7 @@ using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using AndroidX.Core.App;
+using AndroidX.Core.Content;
 using FoldTheDishes.Droid;
 using FoldTheDishes.Models;
 using Xamarin.Forms;
@@ -86,7 +87,9 @@ namespace FoldTheDishes.Services
             NotificationCompat.Builder builder = new NotificationCompat.Builder(AndroidApp.Context, channelId)
                 .SetContentIntent(pendingIntent)
                 .SetContentText(text)
-                .SetSmallIcon(Resource.Mipmap.ic_launcher)
+                .SetSmallIcon(Resource.Mipmap.ic_notification)
+                .SetColor(ContextCompat.GetColor(AndroidApp.Context, Resource.Color.colorAccentVeryLight))
+                .SetAutoCancel(true)
                 .SetDefaults((int)NotificationDefaults.Sound | (int)NotificationDefaults.Vibrate);
 
             Notification notification = builder.Build();

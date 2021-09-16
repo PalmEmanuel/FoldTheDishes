@@ -5,5 +5,7 @@
     <color name="colorPrimaryLight">#7fd8ff</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#fc6471</color>
+    <color name="colorAccentLight">#ff979f</color>
+    <color name="colorAccentVeryLight">#ffc9d0</color>
     <color name="windowBackground">@color/colorPrimary</color>
 </resources>
