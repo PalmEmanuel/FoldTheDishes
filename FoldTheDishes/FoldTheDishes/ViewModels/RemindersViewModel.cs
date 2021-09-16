@@ -170,7 +170,10 @@ namespace FoldTheDishes.ViewModels
                 //        UncompletedReminders.Add(reminder);
                 //    }
                 //}
-                notificationManager.SendNotification(reminder.Id, reminder.Title, reminder.DueDate.Add(reminder.DueTime));
+                if (reminder.DueDate.Add(reminder.DueTime) > DateTime.Now.TrimToMinutes())
+                {
+                    notificationManager.SendNotification(reminder.Id, reminder.Title, reminder.DueDate.Add(reminder.DueTime));
+                }
                 CompletedReminders.Remove(reminder);
             }
 
