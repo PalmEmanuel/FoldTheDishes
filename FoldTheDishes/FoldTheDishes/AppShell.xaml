@@ -19,10 +19,10 @@
         <ResourceDictionary>
             <Style x:Key="BaseStyle" TargetType="Element">
                 <Setter Property="Shell.BackgroundColor" 
-            Value="{AppThemeBinding Dark={StaticResource HeaderBarDark}, 
+                        Value="{AppThemeBinding Dark={StaticResource HeaderBarDark}, 
                         Light={StaticResource HeaderBarLight}}" />
                 <Setter Property="Shell.ForegroundColor" 
-            Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
+                        Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
                         Light={StaticResource PrimaryTextLight}}" />
                 <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
                         Light={StaticResource PrimaryTextLight}}"/>
@@ -30,15 +30,15 @@
                         Light={StaticResource ColorPrimaryDisabled}}" />
                 <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
                 <Setter Property="Shell.TabBarBackgroundColor"
-            Value="{AppThemeBinding Dark={StaticResource HeaderBarDark}, 
-                        Light={StaticResource HeaderBarLight}}"/>
+                        Value="{AppThemeBinding Dark={StaticResource HeaderBarDark}, 
+                        Light={StaticResource SecondaryBackgroundLight}}"/>
                 <Setter Property="Shell.TabBarForegroundColor" 
-            Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
+                        Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
                         Light={StaticResource PrimaryTextLight}}"/>
                 <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF"/>
-                <Setter Property="Shell.TabBarTitleColor"
-            Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
-                        Light={StaticResource PrimaryTextLight}}"/>
+                <Setter Property="Shell.TabBarTitleColor" 
+                        Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
+                        Light={StaticResource PrimaryTextDark}}"/>
             </Style>
             <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
             <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
@@ -55,7 +55,7 @@
                                 <VisualState.Setters>
                                     <Setter Property="BackgroundColor" 
                                 Value="{AppThemeBinding Dark={StaticResource HeaderBarDark}, 
-                        Light={StaticResource HeaderBarLight}}" />
+                        Light={StaticResource SecondaryBackgroundLight}}" />
                                     <Setter TargetName="FlyoutItemLabel" 
                                 Property="Label.TextColor" 
                                 Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
@@ -89,7 +89,7 @@
                                 <VisualState.Setters>
                                     <Setter TargetName="FlyoutItemLabel" 
                                 Property="Label.TextColor" 
-                                Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, Light={StaticResource PrimaryTextLight}}"/>
+                                Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, Light={StaticResource PrimaryTextDark}}"/>
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -106,23 +106,26 @@
     -->
     <FlyoutItem Title="Reminders">
         <FlyoutItem.Icon>
-            <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.ListUl}" FontFamily="FA-S"/>
+            <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.ListUl}" FontFamily="FA-S"
+                             Color="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, Light={StaticResource PrimaryTextDark}}"/>
         </FlyoutItem.Icon>
         <ShellContent Route="RemindersPage" ContentTemplate="{DataTemplate local:RemindersPage}" />
     </FlyoutItem>
-    <!--<FlyoutItem Title="Settings">
+    <FlyoutItem Title="Settings">
         <FlyoutItem.Icon>
-            <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.Cog}" FontFamily="FA-S"/>
+            <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.Cog}" FontFamily="FA-S"
+                             Color="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, Light={StaticResource PrimaryTextDark}}"/>
         </FlyoutItem.Icon>
-        <ShellContent Route="RemindersPage" ContentTemplate="{DataTemplate local:RemindersPage}" />
-    </FlyoutItem>-->
+        <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate local:SettingsPage}" />
+    </FlyoutItem>
     <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
     <!--<MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
     </MenuItem>-->
 
     <MenuItem Command="{x:Static links:ExternalLinks.TwitterCommand}" Text="Developer">
         <MenuItem.IconImageSource>
-            <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.Twitter}" FontFamily="FA-B"/>
+            <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.Twitter}" FontFamily="FA-B" 
+                             Color="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, Light={StaticResource PrimaryTextDark}}"/>
         </MenuItem.IconImageSource>
     </MenuItem>
 
@@ -144,10 +147,10 @@
     // https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyout-header-->
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
-            <StackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource HeaderBarDark}, Light={StaticResource HeaderBarLight}}">
+            <StackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource HeaderBarDark}, Light={StaticResource SecondaryBackgroundLight}}">
                 <Image Margin="50,50,50,30" Source="ic_launcher_round.png" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Aspect="AspectFill"/>
                 <Label Padding="0,0,0,20" FontSize="Large" FontAttributes="Bold" Text="fold the dishes" VerticalOptions="Center" HorizontalOptions="Center"
-                       TextColor="{AppThemeBinding Dark={StaticResource SecondaryTextLight}, Light={StaticResource SecondaryTextDark}}" />
+                       TextColor="{AppThemeBinding Dark={StaticResource SecondaryTextLight}, Light={StaticResource PrimaryTextDark}}" />
                 <BoxView Style="{StaticResource Separator}" Margin="20,0,20,30" />
             </StackLayout>
         </DataTemplate>

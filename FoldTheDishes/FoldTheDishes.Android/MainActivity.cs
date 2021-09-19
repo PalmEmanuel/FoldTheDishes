@@ -16,7 +16,7 @@ namespace FoldTheDishes.Droid
 {
     [Activity(Label = "fold the dishes", Theme = "@style/MainTheme",
         LaunchMode = LaunchMode.SingleTop, Icon = "@mipmap/ic_launcher", RoundIcon = "@mipmap/ic_launcher_round",
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.UiMode )]
     public class MainActivity : FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

@@ -14,7 +14,7 @@
         <Color x:Key="HeaderBarLight">#0078ba</Color>
 
         <Color x:Key="SelectedBackgroundDark">#535353</Color>
-        <Color x:Key="SelectedBackgroundLight">#fc6471</Color>
+        <Color x:Key="SelectedBackgroundLight">#7fd8ff</Color>
 
         <!--<Color x:Key="ColorPrimary">#272635</Color>
         <Color x:Key="ColorPrimaryLight">#4f4e5f</Color>
@@ -83,6 +83,12 @@
             </Setter>
         </Style>
 
+        <Style TargetType="Switch">
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, Light={StaticResource PrimaryBackgroundLight}}" />
+            <Setter Property="OnColor" Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, Light={StaticResource PrimaryTextDark}}" />
+            <Setter Property="ThumbColor" Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, Light={StaticResource PrimaryTextDark}}" />
+        </Style>
+
         <Style TargetType="Label">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
@@ -90,13 +96,13 @@
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
                                 <Setter Property="TextColor"
-                                Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, Light={StaticResource PrimaryTextDark}}"  />
+                                        Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, Light={StaticResource PrimaryTextDark}}"  />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Disabled">
                             <VisualState.Setters>
                                 <Setter Property="TextColor"
-                                Value="{AppThemeBinding Dark={StaticResource DisabledTextLight}, Light={StaticResource DisabledTextDark}}"  />
+                                        Value="{AppThemeBinding Dark={StaticResource DisabledTextLight}, Light={StaticResource DisabledTextDark}}"  />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -213,11 +219,23 @@
                 </VisualStateGroupList>
             </Setter>
             <Setter Property="BackgroundColor"
-                    Value="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
-                        Light={StaticResource SecondaryBackgroundLight}}"/>
+                    Value="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark}, Light={StaticResource SecondaryBackgroundLight}}"/>
+        </Style>
+
+        <Style TargetType="Picker">
+            <Setter Property="BackgroundColor"
+                    Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, Light={StaticResource PrimaryBackgroundLight}}"/>
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, Light={StaticResource PrimaryTextDark}}" />
         </Style>
 
         <Style TargetType="ContentPage">
+            <Setter Property="BackgroundColor"
+            Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, 
+                        Light={StaticResource PrimaryBackgroundLight}}" />
+        </Style>
+
+        <Style TargetType="TableView">
             <Setter Property="BackgroundColor"
             Value="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark}, 
                         Light={StaticResource PrimaryBackgroundLight}}" />

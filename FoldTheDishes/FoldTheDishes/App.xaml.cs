@@ -12,6 +12,9 @@ namespace FoldTheDishes
 
             var reminderStore = ReminderStore.Instance.GetAwaiter().GetResult();
             DependencyService.RegisterSingleton(reminderStore);
+
+            PreferenceManager.SetTheme();
+
             MainPage = new AppShell();
         }
 

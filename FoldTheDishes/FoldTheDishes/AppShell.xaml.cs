@@ -12,11 +12,11 @@ namespace FoldTheDishes
             InitializeComponent();
             Routing.RegisterRoute(nameof(ReminderDetailPage), typeof(ReminderDetailPage));
             Routing.RegisterRoute(nameof(NewReminderPage), typeof(NewReminderPage));
+            Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
         {
-            await Current.GoToAsync("//LoginPage");
         }
     }
 }

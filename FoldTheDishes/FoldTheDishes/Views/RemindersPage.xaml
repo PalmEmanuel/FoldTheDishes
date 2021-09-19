@@ -47,40 +47,43 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout x:DataType="model:Reminder" Orientation="Horizontal" Padding="10,5,10,5">
-                                <CheckBox VerticalOptions="Center" HorizontalOptions="Center" IsChecked="{Binding Completed, Mode=TwoWay}">
-                                    <CheckBox.Behaviors>
-                                        <!-- The reference needs to go through the binding context, and does not work like the TapGestureRecognizer further below
-                                        https://docs.microsoft.com/en-us/answers/questions/327979/xamarin-forms-switch-using-eventtocommandbehavior.html
-                                        https://social.msdn.microsoft.com/Forums/en-US/fa8803d5-5a81-42fa-8491-812b04abb88d/behavior-crashes-quotoperation-is-not-valid-due-to-the-current-state-of-the-objectquot?forum=xamarinforms
-                                        -->
-                                        <toolkit:EventToCommandBehavior EventName="CheckedChanged"
-                                                                        x:DataType="model:Reminder"
-                                                                        Command="{Binding Path=BindingContext.CheckedChangedCommand, Source={x:Reference Name=ReminderListPage}}"
-                                                                        CommandParameter="{Binding .}"
-                                                                        />
-                                    </CheckBox.Behaviors>
-                                </CheckBox>
-                                <StackLayout>
-                                    <BoxView Style="{StaticResource Separator}"
-                                        IsVisible="{Binding ., Converter={StaticResource SeparatorVisibilityConverter}, ConverterParameter={x:Reference Name=UncompletedRemindersListView}}" />
-                                    <Label Text="{Binding Title}"
-                                        LineBreakMode="TailTruncation"
-                                        FontSize="16" />
-                                    <StackLayout Orientation="Horizontal" Spacing="0">
-                                        <Label Text="{Binding DueDate, Converter={StaticResource DateStringConverter}}"
-                                            FontSize="13" />
-                                        <Label Text="{Binding DueTime, StringFormat='{} - {0:hh\\:mm}'}"
-                                            FontSize="13" />
+                            <StackLayout x:DataType="model:Reminder">
+                                <BoxView Style="{StaticResource Separator}"
+                                            IsVisible="{Binding ., Converter={StaticResource SeparatorVisibilityConverter}, ConverterParameter={x:Reference Name=UncompletedRemindersListView}}" />
+                                <StackLayout Orientation="Horizontal" Padding="10,5,10,5">
+                                    <CheckBox VerticalOptions="Center" HorizontalOptions="Center" IsChecked="{Binding Completed, Mode=TwoWay}">
+                                        <CheckBox.Behaviors>
+                                            <!-- The reference needs to go through the binding context, and does not work like the TapGestureRecognizer further below
+                                            https://docs.microsoft.com/en-us/answers/questions/327979/xamarin-forms-switch-using-eventtocommandbehavior.html
+                                            https://social.msdn.microsoft.com/Forums/en-US/fa8803d5-5a81-42fa-8491-812b04abb88d/behavior-crashes-quotoperation-is-not-valid-due-to-the-current-state-of-the-objectquot?forum=xamarinforms
+                                            -->
+                                            <toolkit:EventToCommandBehavior EventName="CheckedChanged"
+                                                                            x:DataType="model:Reminder"
+                                                                            Command="{Binding Path=BindingContext.CheckedChangedCommand, Source={x:Reference Name=ReminderListPage}}"
+                                                                            CommandParameter="{Binding .}"
+                                                                            />
+                                        </CheckBox.Behaviors>
+                                    </CheckBox>
+                                    <StackLayout>
+                                        <Label Text="{Binding Title}"
+                                            LineBreakMode="TailTruncation"
+                                            FontSize="16" />
+                                        <StackLayout Orientation="Horizontal" Spacing="0">
+                                            <Label Text="{Binding DueDate, Converter={StaticResource DateStringConverter}}"
+                                                FontSize="13" />
+                                            <Label Text="{Binding DueTime, StringFormat='{} - {0:hh\\:mm}'}"
+                                                FontSize="13" />
+                                        </StackLayout>
                                     </StackLayout>
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            NumberOfTapsRequired="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type local:RemindersViewModel}}, Path=ReminderTapped}"		
+                                            CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </StackLayout.GestureRecognizers>
                                 </StackLayout>
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        NumberOfTapsRequired="1"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:RemindersViewModel}}, Path=ReminderTapped}"		
-                                        CommandParameter="{Binding .}">
-                                    </TapGestureRecognizer>
-                                </StackLayout.GestureRecognizers>
+
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
