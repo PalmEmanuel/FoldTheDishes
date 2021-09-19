@@ -14,9 +14,5 @@ namespace FoldTheDishes
             Routing.RegisterRoute(nameof(NewReminderPage), typeof(NewReminderPage));
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
         }
-
-        private async void OnMenuItemClicked(object sender, EventArgs e)
-        {
-        }
     }
 }
