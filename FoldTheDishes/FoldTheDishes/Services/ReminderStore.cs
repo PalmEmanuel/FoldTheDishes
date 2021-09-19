@@ -48,14 +48,9 @@ namespace FoldTheDishes.Services
             return Database.Table<Reminder>().ToListAsync();
         }
 
-        public Task<List<Reminder>> GetItemsNotDoneAsync()
+        public Task<List<Reminder>> GetDoneItemsThatAreOlderThanDateAsync(DateTime date)
         {
-            return Database.QueryAsync<Reminder>("SELECT * FROM [Reminder] WHERE [Completed] = false");
-        }
-
-        public Task<List<Reminder>> GetItemsDoneAsync()
-        {
-            return Database.QueryAsync<Reminder>("SELECT * FROM [Reminder] WHERE [Completed] = true");
+            return Database.QueryAsync<Reminder>($"SELECT * FROM [Reminder] WHERE [Completed] = true AND [DueDate] < {date.Ticks}");
         }
 
         public Task<Reminder> GetItemAsync(int id)

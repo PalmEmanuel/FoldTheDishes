@@ -30,7 +30,11 @@ namespace FoldTheDishes.ViewModels
         public string SelectedRetentionOption
         {
             get => selectedRetentionOption;
-            set => SetProperty(ref selectedRetentionOption, value);
+            set
+            {
+                SetProperty(ref selectedRetentionOption, value);
+                Preferences.Set(Constants.CONFIG_REMINDER_RETENTION_TEXT, value);
+            }
         }
 
         public SettingsViewModel()
@@ -50,7 +54,7 @@ namespace FoldTheDishes.ViewModels
             RetentionOptions.Add("6 Months");
             RetentionOptions.Add("1 Year");
 
-            SelectedRetentionOption = "Forever";
+            SelectedRetentionOption = Preferences.Get(Constants.CONFIG_REMINDER_RETENTION_TEXT, "Forever");
         }
 
         private void UpdateTheme()

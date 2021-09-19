@@ -6,6 +6,51 @@ namespace FoldTheDishes.Services
 {
     static class PreferenceManager
     {
+        public static void ApplyReminderRetention(ReminderStore store)
+        {
+            string retention = "Forever";
+            // If user has saved a preference before, retreive it
+            if (Preferences.ContainsKey(Constants.CONFIG_REMINDER_RETENTION_TEXT))
+            {
+                retention = Preferences.Get(Constants.CONFIG_REMINDER_RETENTION_TEXT, "Forever");
+            }
+
+            DateTime date;
+            DateTime today = DateTime.Now.Date;
+            switch (retention)
+            {
+                case "Forever":
+                    return;
+                case "1 Year":
+                    date = today.AddYears(-1);
+                    break;
+                case "6 Months":
+                    date = today.AddMonths(-6);
+                    break;
+                case "3 months":
+                    date = today.AddMonths(-3);
+                    break;
+                case "1 Month":
+                    date = today.AddMonths(-1);
+                    break;
+                case "1 Week":
+                    date = today.AddDays(-7);
+                    break;
+                case "1 Day":
+                    date = today.AddDays(-1);
+                    break;
+                default:
+                    return;
+            }
+
+            var itemsToDelete = store.GetDoneItemsThatAreOlderThanDateAsync(date).Result;
+
+            foreach (var item in itemsToDelete)
+            {
+                store.DeleteItemAsync(item);
+            }
+        }
+
         public static void SetTheme()
         {
             bool themeLoaded = false;

@@ -14,5 +14,6 @@ namespace FoldTheDishes
         public const string NO_TEXT = "No";
 
         public const string CONFIG_THEME_TEXT = "theme";
+        public const string CONFIG_REMINDER_RETENTION_TEXT = "reminder_retention";
     }
 }

@@ -13,20 +13,14 @@
             <RowDefinition />
             <RowDefinition Height="1"/>
             <RowDefinition />
-            <RowDefinition />
-            <RowDefinition Height="1"/>
-            <RowDefinition />
         </Grid.RowDefinitions>
-        <!--<Label Grid.Row="0" Text="Appearance" Padding="10" FontAttributes="Bold" FontSize="Medium"/>-->
-        <!--<Line Grid.Row="1" BackgroundColor="{AppThemeBinding Dark={StaticResource DividerLight}, Light={StaticResource DividerDark}}" />-->
         <StackLayout Grid.Row="0" Orientation="Horizontal" Padding="20,0,20,0">
             <Label FontSize="16" VerticalOptions="Center" Text="Dark Mode" />
             <Switch HorizontalOptions="EndAndExpand" IsToggled="{Binding DarkMode, Mode=TwoWay}" ThumbColor="{StaticResource ColorPrimary}"/>
         </StackLayout>
-        <!--<Label Grid.Row="2" Text="Reminders" Padding="10" FontAttributes="Bold" FontSize="Medium"/>-->
         <Line Grid.Row="1" BackgroundColor="{AppThemeBinding Dark={StaticResource DividerLight}, Light={StaticResource DividerDark}}" />
         <StackLayout Grid.Row="2" Orientation="Horizontal" Padding="20,0,20,10">
-            <Label FontSize="16" VerticalOptions="End" Text="Reminder Retention" Margin="0,0,0,12" />
+            <Label FontSize="16" VerticalOptions="End" Text="Done Reminders Retention" Margin="0,0,0,12" />
             <Picker ItemsSource="{Binding RetentionOptions}"
                     SelectedItem="{Binding SelectedRetentionOption}"
                     WidthRequest="100"

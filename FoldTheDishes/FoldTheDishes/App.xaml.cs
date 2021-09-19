@@ -14,6 +14,7 @@ namespace FoldTheDishes
             DependencyService.RegisterSingleton(reminderStore);
 
             PreferenceManager.SetTheme();
+            PreferenceManager.ApplyReminderRetention(reminderStore);
 
             MainPage = new AppShell();
         }
