@@ -50,7 +50,8 @@
                     </Entry.Keyboard>
                 </Entry>
                 <Frame HorizontalOptions="End" CornerRadius="5" Padding="0" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
-                                Light={StaticResource SecondaryBackgroundLight}}">
+                                Light={StaticResource SecondaryBackgroundLight}}" BorderColor="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark},
+                                Light={StaticResource SecondaryTextDark}}">
                     <Grid RowDefinitions="30, 35" RowSpacing="0" HorizontalOptions="End" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
                                 Light={StaticResource SecondaryBackgroundLight}}">
                         <CheckBox Grid.Row="1" Margin="6, -10, 0, 0" HorizontalOptions="Center" IsChecked="{Binding Completed, Mode=TwoWay}"/>
