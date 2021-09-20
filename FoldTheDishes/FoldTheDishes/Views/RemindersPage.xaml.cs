@@ -23,7 +23,6 @@ namespace FoldTheDishes.Views
 
         void WhenCurrentPageChanged(object sender, System.EventArgs e)
         {
-            //viewModel.CurrentPage = CurrentPage.Title;
             viewModel.LoadRemindersCommand.Execute(null);
         }
     }

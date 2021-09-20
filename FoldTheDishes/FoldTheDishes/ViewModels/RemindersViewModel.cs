@@ -51,7 +51,7 @@ namespace FoldTheDishes.ViewModels
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={id}");
+                await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={id}", true);
             });
         }
 
@@ -105,7 +105,7 @@ namespace FoldTheDishes.ViewModels
 
         private async void OnAddReminder(object obj)
         {
-            await Shell.Current.GoToAsync(nameof(NewReminderPage));
+            await Shell.Current.GoToAsync(nameof(NewReminderPage), true);
         }
 
         async void OnRemindersSelected(Reminder reminder)
@@ -114,7 +114,7 @@ namespace FoldTheDishes.ViewModels
                 return;
 
             // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={reminder.Id}");
+            await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={reminder.Id}", true);
         }
 
         private async Task CheckedChanged(Reminder reminder)

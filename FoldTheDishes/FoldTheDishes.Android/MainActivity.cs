@@ -35,6 +35,7 @@ namespace FoldTheDishes.Droid
 
         protected override void OnNewIntent(Intent intent)
         {
+            base.OnNewIntent(intent);
             CreateNotificationFromIntent(intent);
         }
 

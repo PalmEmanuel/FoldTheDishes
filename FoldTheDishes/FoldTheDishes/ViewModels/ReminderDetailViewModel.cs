@@ -122,12 +122,13 @@ namespace FoldTheDishes.ViewModels
                         Constants.CANCEL_BUTTON_TEXT);
                     if (action)
                     {
-                        await Shell.Current.GoToAsync("..");
+                        // Replace navigation stack with the "root" list page RemindersPage
+                        await Shell.Current.GoToAsync("//RemindersPage", true);
                     }
                 }
                 else
                 {
-                    await Shell.Current.GoToAsync("..");
+                    await Shell.Current.GoToAsync("//RemindersPage", true);
                 }
             };
         }
@@ -136,7 +137,7 @@ namespace FoldTheDishes.ViewModels
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={id}");
+                await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(Id)}={id}");
             });
         }
 
@@ -162,7 +163,7 @@ namespace FoldTheDishes.ViewModels
                 await DataStore.DeleteItemAsync(new Reminder { Id = Id });
 
                 // This will pop the current page off the navigation stack
-                await Shell.Current.GoToAsync("..");
+                await Shell.Current.GoToAsync("..", true);
             }
         }
 
@@ -197,7 +198,7 @@ namespace FoldTheDishes.ViewModels
             {
                 await DataStore.UpdateItemAsync(newReminder);
                 // This will pop the current page off the navigation stack
-                await Shell.Current.GoToAsync("..");
+                await Shell.Current.GoToAsync("..", true);
             }
         }
 

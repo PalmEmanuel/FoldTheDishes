@@ -19,7 +19,6 @@ namespace FoldTheDishes.ViewModels
         {
             base.Title = "New reminder";
             SaveCommand = new Command(OnSave, ValidateSave);
-            CancelCommand = new Command(OnCancel);
             this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
 
@@ -39,7 +38,7 @@ namespace FoldTheDishes.ViewModels
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={id}");
+                await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={id}", true);
             });
         }
 
@@ -71,13 +70,6 @@ namespace FoldTheDishes.ViewModels
         public DateTime Today { get; }
 
         public Command SaveCommand { get; }
-        public Command CancelCommand { get; }
-
-        private async void OnCancel()
-        {
-            // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..");
-        }
 
         private async void OnSave()
         {
@@ -97,7 +89,7 @@ namespace FoldTheDishes.ViewModels
             notificationManager.SendNotification(newReminder.Id, newReminder.Title, newReminder.DueDate.Add(newReminder.DueTime));
 
             // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..");
+            await Shell.Current.GoToAsync("..", true);
         }
     }
 }
