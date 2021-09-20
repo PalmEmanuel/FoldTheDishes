@@ -9,8 +9,7 @@ using FoldTheDishes.Models;
 using Xamarin.Forms;
 using AndroidApp = Android.App.Application;
 
-[assembly: Dependency(typeof(FoldTheDishes.Services.AndroidNotificationManager)),
-    UsesPermission(Name = "android.permission.RECEIVE_BOOT_COMPLETED")]
+[assembly: Dependency(typeof(FoldTheDishes.Services.AndroidNotificationManager))]
 namespace FoldTheDishes.Services
 {
     public class AndroidNotificationManager : INotificationManager
@@ -23,7 +22,6 @@ namespace FoldTheDishes.Services
         public const string TextKey = "title";
 
         bool channelInitialized = false;
-        int messageId = 0;
 
         NotificationManager manager;
 
@@ -93,7 +91,7 @@ namespace FoldTheDishes.Services
                 .SetDefaults((int)NotificationDefaults.Sound | (int)NotificationDefaults.Vibrate);
 
             Notification notification = builder.Build();
-            manager.Notify(messageId++, notification);
+            manager.Notify(id, notification);
         }
 
         public void DeleteNotification(int id)

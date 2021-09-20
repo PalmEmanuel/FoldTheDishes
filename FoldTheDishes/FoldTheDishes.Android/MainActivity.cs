@@ -3,11 +3,9 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
-using Android.Views;
 using AndroidX.AppCompat.App;
 using FoldTheDishes.Services;
 using FoldTheDishes.ViewModels;
-using FoldTheDishes.Views;
 using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
@@ -21,18 +19,6 @@ namespace FoldTheDishes.Droid
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            //// Hide status bar
-            //Window.AddFlags(WindowManagerFlags.Fullscreen | WindowManagerFlags.TurnScreenOn);
-            //if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
-            //{
-            //    var stBarHeight = typeof(FormsAppCompatActivity).GetField("statusBarHeight", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            //    if (stBarHeight == null)
-            //    {
-            //        stBarHeight = typeof(FormsAppCompatActivity).GetField("_statusBarHeight", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            //    }
-            //    stBarHeight?.SetValue(this, 0);
-            //}
-
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 

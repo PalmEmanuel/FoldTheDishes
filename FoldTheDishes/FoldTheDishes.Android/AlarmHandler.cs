@@ -1,12 +1,11 @@
 ﻿using Android.App;
 using Android.Content;
 using FoldTheDishes.Services;
-using Xamarin.Forms;
 
 namespace FoldTheDishes.Droid
 {
-    [BroadcastReceiver(Enabled = true, Label = "Fold The Dishes Broadcast Receiver", Permission = "android.permission.RECEIVE_BOOT_COMPLETED")]
-    [IntentFilter(new string[] { Intent.ActionBootCompleted }, Priority = 1337)]
+    [BroadcastReceiver(Enabled = true, DirectBootAware = true, Label = "Fold The Dishes Broadcast Receiver")]
+    [IntentFilter(new string[] { Intent.ActionLockedBootCompleted }, Priority = (int)IntentFilterPriority.HighPriority)]
     public class AlarmHandler : BroadcastReceiver
     {
         public override void OnReceive(Context context, Intent intent)
@@ -14,11 +13,13 @@ namespace FoldTheDishes.Droid
             AndroidNotificationManager manager = AndroidNotificationManager.Instance ?? new AndroidNotificationManager();
 
             // If user restarted the phone, recreate all notifications
-            if (intent.Action == Intent.ActionBootCompleted)
+            if (intent.Action == Intent.ActionLockedBootCompleted)
             {
-                ReminderStore dataStore = DependencyService.Get<ReminderStore>(DependencyFetchTarget.GlobalInstance);
+                // Not using dependency service since the ReminderStore has not been registered when the boot event is received
+                var dataStore = ReminderStore.Instance.GetAwaiter().GetResult();
+                var notDoneItems = dataStore.GetNotDoneItems().Result;
 
-                foreach (var item in dataStore.GetNotDoneItems().Result)
+                foreach (var item in notDoneItems)
                 {
                     manager.SendNotification(item.Id, item.Title, item.DueDate.Add(item.DueTime));
                 }
