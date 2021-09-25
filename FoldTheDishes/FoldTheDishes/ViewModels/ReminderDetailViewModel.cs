@@ -184,9 +184,9 @@ namespace FoldTheDishes.ViewModels
 
             if (Completed && inFuture)
             {
-                proceed = await Shell.Current.DisplayAlert("You will not be reminded!", "The reminder is marked as completed, and you will not be reminded when the date is reached.",
-                    Constants.CONFIRM_BUTTON_TEXT,
-                    Constants.CANCEL_BUTTON_TEXT);
+                //proceed = await Shell.Current.DisplayAlert("You will not be reminded!", "The reminder is marked as completed, and you will not be reminded when the date is reached.",
+                //    Constants.CONFIRM_BUTTON_TEXT,
+                //    Constants.CANCEL_BUTTON_TEXT);
             }
             else if (inFuture)
             {
@@ -196,6 +196,10 @@ namespace FoldTheDishes.ViewModels
 
             if (proceed)
             {
+                if (Completed)
+                {
+                    notificationManager.DeleteNotification(Id);
+                }
                 await DataStore.UpdateItemAsync(newReminder);
                 // This will pop the current page off the navigation stack
                 await Shell.Current.GoToAsync("..", true);
