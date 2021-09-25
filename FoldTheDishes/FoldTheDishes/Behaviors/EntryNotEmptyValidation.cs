@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using FoldTheDishes.Services;
 using Xamarin.Forms;
 
 namespace FoldTheDishes.Behaviors

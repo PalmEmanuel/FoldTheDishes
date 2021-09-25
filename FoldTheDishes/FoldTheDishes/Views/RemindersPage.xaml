@@ -28,6 +28,7 @@
         <ResourceDictionary>
             <converters:SeparatorVisibilityConverter x:Key="SeparatorVisibilityConverter"/>
             <converters:DateStringConverter x:Key="DateStringConverter"/>
+            <converters:ExpiredTextColorConverter x:Key="ExpiredTextColorConverter"/>
         </ResourceDictionary>
     </TabbedPage.Resources>
 
@@ -70,9 +71,9 @@
                                             FontSize="16" />
                                         <StackLayout Orientation="Horizontal" Spacing="0">
                                             <Label Text="{Binding DueDate, Converter={StaticResource DateStringConverter}}"
-                                                FontSize="13" />
+                                                FontSize="13" TextColor="{Binding DueDateTime, Converter={StaticResource ExpiredTextColorConverter}}"/>
                                             <Label Text="{Binding DueTime, StringFormat='{} - {0:hh\\:mm}'}"
-                                                FontSize="13" />
+                                                FontSize="13" TextColor="{Binding DueDateTime, Converter={StaticResource ExpiredTextColorConverter}}"/>
                                         </StackLayout>
                                     </StackLayout>
                                     <StackLayout.GestureRecognizers>

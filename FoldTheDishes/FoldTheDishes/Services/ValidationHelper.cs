@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace FoldTheDishes.Behaviors
+namespace FoldTheDishes.Services
 {
     static class ValidationHelper
     {
@@ -43,7 +43,7 @@ namespace FoldTheDishes.Behaviors
             }
         }
 
-        private static Color GetErrorColor()
+        internal static Color GetErrorColor()
         {
             switch (Application.Current.RequestedTheme)
             {
@@ -58,7 +58,7 @@ namespace FoldTheDishes.Behaviors
             }
         }
 
-        private static Color GetTextColor()
+        internal static Color GetTextColor()
         {
             switch (Application.Current.RequestedTheme)
             {
