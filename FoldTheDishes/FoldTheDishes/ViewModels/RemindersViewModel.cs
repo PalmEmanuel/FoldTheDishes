@@ -15,6 +15,8 @@ namespace FoldTheDishes.ViewModels
     {
         private Reminder selectedReminder;
 
+        private bool navigating;
+
         public ObservableCollection<Reminder> UncompletedReminders { get; }
         public ObservableCollection<Reminder> CompletedReminders { get; }
         public Command LoadRemindersCommand { get; }
@@ -30,6 +32,9 @@ namespace FoldTheDishes.ViewModels
         public RemindersViewModel()
         {
             Title = "Reminders";
+
+            navigating = false;
+
             UncompletedReminders = new ObservableCollection<Reminder>();
             CompletedReminders = new ObservableCollection<Reminder>();
             LoadRemindersCommand = new Command(async () => await ExecuteLoadRemindersCommand());
@@ -113,8 +118,14 @@ namespace FoldTheDishes.ViewModels
             if (reminder == null)
                 return;
 
-            // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={reminder.Id}", true);
+            // prevent multiple navigations at the same time
+            if (!navigating)
+            {
+                navigating = true;
+                // This will push the ItemDetailPage onto the navigation stack
+                await Shell.Current.GoToAsync($"{nameof(ReminderDetailPage)}?{nameof(ReminderDetailViewModel.Id)}={reminder.Id}", true);
+            }
+            navigating = false;
         }
 
         private async Task CheckedChanged(Reminder reminder)
