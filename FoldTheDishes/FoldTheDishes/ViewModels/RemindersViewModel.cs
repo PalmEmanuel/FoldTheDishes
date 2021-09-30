@@ -68,7 +68,7 @@ namespace FoldTheDishes.ViewModels
             {
                 UncompletedReminders.Clear();
                 CompletedReminders.Clear();
-                var reminders = (await DataStore.GetItemsAsync()).OrderBy(r => r.DueDate.Add(r.DueTime));
+                var reminders = (await DataStore.GetItemsAsync()).OrderBy(r => r.DueDateTime);
                 foreach (var reminder in reminders)
                 {
                     switch (reminder.Completed)
@@ -181,9 +181,9 @@ namespace FoldTheDishes.ViewModels
                 //        UncompletedReminders.Add(reminder);
                 //    }
                 //}
-                if (reminder.DueDate.Add(reminder.DueTime) > DateTime.Now.TrimToMinutes())
+                if (reminder.DueDateTime > DateTime.Now.TrimToMinutes())
                 {
-                    notificationManager.SendNotification(reminder.Id, reminder.Title, reminder.DueDate.Add(reminder.DueTime));
+                    notificationManager.SendNotification(reminder.Id, reminder.Title, reminder.DueDateTime, reminder.RepeatInterval);
                 }
                 CompletedReminders.Remove(reminder);
             }

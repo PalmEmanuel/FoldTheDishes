@@ -25,6 +25,7 @@
                     SelectedItem="{Binding SelectedRetentionOption}"
                     WidthRequest="100"
                     HeightRequest="60"
+                    Margin="0, 10, 0, 0"
                     VerticalOptions="Start"
                     HorizontalOptions="EndAndExpand"
                     HorizontalTextAlignment="Center"

@@ -1,6 +1,8 @@
 ﻿using Android.App;
 using Android.Content;
+using FoldTheDishes.Models;
 using FoldTheDishes.Services;
+using System;
 
 namespace FoldTheDishes.Droid
 {
@@ -21,15 +23,29 @@ namespace FoldTheDishes.Droid
 
                 foreach (var item in notDoneItems)
                 {
-                    manager.SendNotification(item.Id, item.Title, item.DueDate.Add(item.DueTime));
+                    manager.SendNotification(item.Id, item.Title, item.DueDateTime, item.RepeatInterval);
                 }
             }
             else if (intent?.Extras != null)
             {
                 int id = intent.GetIntExtra(AndroidNotificationManager.IdKey, -1);
                 string text = intent.GetStringExtra(AndroidNotificationManager.TextKey);
+                // See if the reminder is repeating
+                string repeatingType = intent.GetStringExtra(AndroidNotificationManager.RepeatingIntervalKey);
 
                 manager.Show(id, text);
+
+                if (repeatingType != null)
+                {
+                    // If the repeating type is monthly we need to calculate the difference between months in days manually
+                    if (repeatingType == "monthly")
+                    {
+                        // Get the time that the current notification was scheduled to
+                        DateTime currentReminderOccurrence = new DateTime(intent.GetLongExtra(AndroidNotificationManager.NextOccurrenceKey, AlarmManager.IntervalDay * 30));
+                        // Set the next notification to be one month in the future (adjusting properly for days in month)
+                        manager.SendNotification(id, text, currentReminderOccurrence.AddMonths(1), ReminderInterval.Monthly);
+                    }
+                }
             }
         }
     }

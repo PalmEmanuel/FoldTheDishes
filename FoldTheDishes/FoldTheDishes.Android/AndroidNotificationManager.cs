@@ -1,6 +1,7 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
+using Android.Icu.Util;
 using Android.OS;
 using AndroidX.Core.App;
 using AndroidX.Core.Content;
@@ -20,6 +21,8 @@ namespace FoldTheDishes.Services
 
         public const string IdKey = "id";
         public const string TextKey = "title";
+        public const string RepeatingIntervalKey = "interval";
+        public const string NextOccurrenceKey = "next";
 
         bool channelInitialized = false;
 
@@ -40,7 +43,7 @@ namespace FoldTheDishes.Services
             }
         }
 
-        public void SendNotification(int id, string text, DateTime? notifyTime = null)
+        public void SendNotification(int id, string text, DateTime? notifyTime = null, ReminderInterval? repeatInterval = null)
         {
             if (!channelInitialized)
             {
@@ -49,14 +52,31 @@ namespace FoldTheDishes.Services
 
             if (notifyTime != null)
             {
+                AlarmManager alarmManager = AndroidApp.Context.GetSystemService(Context.AlarmService) as AlarmManager;
+
                 Intent intent = new Intent(AndroidApp.Context, typeof(AlarmHandler));
                 intent.PutExtra(IdKey, id);
                 intent.PutExtra(TextKey, text);
 
-                PendingIntent pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, id, intent, PendingIntentFlags.UpdateCurrent);
                 long triggerTime = GetNotifyTime(notifyTime.Value);
-                AlarmManager alarmManager = AndroidApp.Context.GetSystemService(Context.AlarmService) as AlarmManager;
-                alarmManager.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, triggerTime, pendingIntent);
+
+                if (repeatInterval != null)
+                {
+                    intent.PutExtra(RepeatingIntervalKey, repeatInterval.ToString());
+                    intent.PutExtra(NextOccurrenceKey, notifyTime.Value.Ticks);
+                }
+
+                PendingIntent pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, id, intent, PendingIntentFlags.UpdateCurrent);
+
+                if (repeatInterval != null)
+                {
+                    long intervalTime = GetIntervalTime((ReminderInterval)repeatInterval);
+                    alarmManager.SetRepeating(AlarmType.RtcWakeup, triggerTime, intervalTime, pendingIntent);
+                }
+                else
+                {
+                    alarmManager.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, triggerTime, pendingIntent);
+                }
             }
             else
             {
@@ -99,7 +119,10 @@ namespace FoldTheDishes.Services
             Intent intent = new Intent(AndroidApp.Context, typeof(AlarmHandler));
             PendingIntent pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, id, intent, PendingIntentFlags.CancelCurrent);
             AlarmManager alarmManager = AndroidApp.Context.GetSystemService(Context.AlarmService) as AlarmManager;
+            // removes scheduled notification
             alarmManager.Cancel(pendingIntent);
+            // also cancels any active notification in notification bar
+            pendingIntent.Cancel();
         }
 
         void CreateNotificationChannel()
@@ -119,12 +142,40 @@ namespace FoldTheDishes.Services
             channelInitialized = true;
         }
 
-        long GetNotifyTime(DateTime notifyTime)
+        public static long GetNotifyTime(DateTime notifyTime)
         {
             DateTime utcTime = TimeZoneInfo.ConvertTimeToUtc(notifyTime);
             double epochDiff = (new DateTime(1970, 1, 1) - DateTime.MinValue).TotalSeconds;
             long utcAlarmTime = utcTime.AddSeconds(-epochDiff).Ticks / 10000;
             return utcAlarmTime; // milliseconds
+        }
+
+        public static long GetIntervalTime(ReminderInterval interval)
+        {
+            var now = DateTime.Now;
+            
+            long intervalMilliseconds;
+            switch (interval)
+            {
+                //case ReminderInterval.Minutely:
+                //    intervalMilliseconds = 60 * 1000;
+                //    break;
+                case ReminderInterval.Daily:
+                    intervalMilliseconds = AlarmManager.IntervalDay;
+                    break;
+                case ReminderInterval.Weekly:
+                    intervalMilliseconds = AlarmManager.IntervalDay * 7;
+                    break;
+                case ReminderInterval.Monthly:
+                    intervalMilliseconds = (long)(now.AddMonths(1) - now).TotalMilliseconds;
+                    break;
+                case ReminderInterval.Yearly:
+                    intervalMilliseconds = DateTime.IsLeapYear(DateTime.Now.Year) ? AlarmManager.IntervalDay * 366 : AlarmManager.IntervalDay * 365;
+                    break;
+                default:
+                    throw new Exception("Unexpected interval!");
+            }
+            return intervalMilliseconds;
         }
     }
 }

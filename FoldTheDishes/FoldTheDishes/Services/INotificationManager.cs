@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FoldTheDishes.Models;
+using System;
 
 namespace FoldTheDishes.Services
 {
@@ -6,7 +7,7 @@ namespace FoldTheDishes.Services
     {
         event EventHandler NotificationReceived;
         void Initialize();
-        void SendNotification(int id, string text, DateTime? notifyTime = null);
+        void SendNotification(int id, string text, DateTime? notifyTime = null, ReminderInterval? repeatInterval = null);
         void ReceiveNotification(int id, string text);
         void DeleteNotification(int id);
     }

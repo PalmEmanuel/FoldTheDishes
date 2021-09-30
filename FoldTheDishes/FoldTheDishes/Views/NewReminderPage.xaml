@@ -65,6 +65,27 @@
                            FontSize="11"/>
                 </Grid>
             </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Frame HorizontalOptions="Start" CornerRadius="5" Padding="0" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                                Light={StaticResource SecondaryBackgroundLight}}" BorderColor="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark},
+                                Light={StaticResource SecondaryTextDark}}">
+                    <Grid RowDefinitions="30, 35" RowSpacing="0" HorizontalOptions="End" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                                Light={StaticResource SecondaryBackgroundLight}}">
+                        <CheckBox Grid.Row="1" Margin="6, -10, 0, 0" HorizontalOptions="Center" IsChecked="{Binding IsRepeating, Mode=TwoWay}"/>
+                        <Label Text="Repeats"
+                               Grid.Row="0"
+                               Margin="12, 10, 12, 0"
+                               FontSize="11"/>
+                    </Grid>
+                </Frame>
+                <Picker
+                    IsEnabled="{Binding IsRepeating}"
+                    ItemsSource="{Binding RepeatIntervals}"
+                    SelectedItem="{Binding SelectedRepeatInterval}"
+                    WidthRequest="120"
+                    HorizontalOptions="StartAndExpand"
+                    HorizontalTextAlignment="Center"/>
+            </StackLayout>
             <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
         </StackLayout>
     </ContentPage.Content>

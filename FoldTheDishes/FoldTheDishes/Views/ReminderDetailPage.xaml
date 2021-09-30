@@ -14,17 +14,11 @@
             <converters:CompletedIconConverter x:Key="CompletedIconConverter"/>
             <converters:CompletedStringConverter x:Key="CompletedStringConverter"/>
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:AllTrueMultiConverter x:Key="AllTrueMultiConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <!--<ToolbarItem Command="{Binding CompleteCommand}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource Glyph="{Binding Path=BindingContext.Completed, Source={x:Reference Name=ReminderDetail}, Converter={StaticResource CompletedIconConverter}}"
-                                 FontFamily="FA-R" Size="Medium" Color="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
-                        Light={StaticResource PrimaryTextDark}}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>-->
         <ToolbarItem Command="{Binding DeleteCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource Glyph="{x:Static fontAwesome:FontAwesomeIcons.Trash}" FontFamily="FA-S" Size="Medium" Color="{AppThemeBinding Dark={StaticResource PrimaryTextLight}, 
@@ -103,6 +97,34 @@
                            Margin="12, 10, 0, 0"
                            FontSize="11"/>
                 </Grid>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Frame HorizontalOptions="Start" CornerRadius="5" Padding="0" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                                Light={StaticResource SecondaryBackgroundLight}}" BorderColor="{AppThemeBinding Dark={StaticResource PrimaryBackgroundDark},
+                                Light={StaticResource SecondaryTextDark}}">
+                    <Grid RowDefinitions="30, 35" RowSpacing="0" HorizontalOptions="End" BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBackgroundDark},
+                                Light={StaticResource SecondaryBackgroundLight}}">
+                        <CheckBox Grid.Row="1" Margin="6, -10, 0, 0" HorizontalOptions="Center" x:Name="RepeatCheckbox" IsChecked="{Binding IsRepeating, Mode=TwoWay}"
+                                  IsEnabled="{Binding Completed, Converter={StaticResource InverseBooleanConverter}}"/>
+                        <Label Text="Repeats"
+                               Grid.Row="0"
+                               Margin="12, 10, 12, 0"
+                               FontSize="11" />
+                    </Grid>
+                </Frame>
+                <Picker
+                    ItemsSource="{Binding RepeatIntervals}"
+                    SelectedItem="{Binding SelectedRepeatInterval}"
+                    WidthRequest="120"
+                    HorizontalOptions="StartAndExpand"
+                    HorizontalTextAlignment="Center">
+                    <Picker.IsEnabled>
+                        <MultiBinding Converter="{StaticResource AllTrueMultiConverter}">
+                            <Binding Path="IsRepeating"/>
+                            <Binding Path="Completed" Converter="{StaticResource InverseBooleanConverter}"/>
+                        </MultiBinding>
+                    </Picker.IsEnabled>
+                </Picker>
             </StackLayout>
             <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding CanSave}"></Button>
         </StackLayout>

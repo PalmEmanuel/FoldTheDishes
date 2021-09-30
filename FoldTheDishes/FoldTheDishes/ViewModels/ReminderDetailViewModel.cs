@@ -2,6 +2,7 @@
 using FoldTheDishes.Services;
 using FoldTheDishes.Views;
 using System;
+using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 namespace FoldTheDishes.ViewModels
@@ -15,12 +16,20 @@ namespace FoldTheDishes.ViewModels
         private DateTime dueDate;
         private TimeSpan dueTime;
         private bool completed;
+        private bool isRepeating;
+
+        private Reminder reminder;
 
         private string originalTitle;
         private string originalNotes;
         private DateTime originalDueDate;
         private TimeSpan originalDueTime;
         private bool originalCompleted;
+        private bool originalIsRepeating;
+        private ReminderInterval? originalRepeatInterval;
+
+        public ObservableCollection<string> RepeatIntervals { get; }
+        private string selectedRepeatInterval;
 
         private bool canSave;
         public bool CanSave
@@ -35,12 +44,16 @@ namespace FoldTheDishes.ViewModels
 
         private void WasChanged()
         {
-            CanSave = title != originalTitle ||
-                notes != originalNotes ||
-                dueDate != originalDueDate ||
-                dueTime != originalDueTime ||
-                completed != originalCompleted ||
-                (completed && !originalCompleted);
+            bool wasChanged = title != originalTitle || // Title changed
+                notes != originalNotes || // Notes changed
+                (dueDate.Year > 1900 && dueDate != originalDueDate) || // DueDate changed
+                dueTime != originalDueTime || // DueTime changed
+                completed != originalCompleted || // Completed changed
+                isRepeating != originalIsRepeating || // Repeating changed
+                (isRepeating && originalRepeatInterval != (ReminderInterval)Enum.Parse(typeof(ReminderInterval), selectedRepeatInterval)); // Repeating true and interval changed
+
+            CanSave = !string.IsNullOrWhiteSpace(title) && (wasChanged && dueDate.Add(dueTime) > DateTime.Now ||
+                (completed && !originalCompleted));
         }
 
         public int Id
@@ -86,15 +99,25 @@ namespace FoldTheDishes.ViewModels
             set
             {
                 SetProperty(ref completed, value);
-                WasChanged();
             }
+        }
+
+        public bool IsRepeating
+        {
+            get => isRepeating;
+            set => SetProperty(ref isRepeating, value);
+        }
+
+        public string SelectedRepeatInterval
+        {
+            get => selectedRepeatInterval;
+            set => SetProperty(ref selectedRepeatInterval, value);
         }
 
         INotificationManager notificationManager;
 
         public Command SaveCommand { get; }
         public Command DeleteCommand { get; }
-        public Command CompleteCommand { get; }
 
         public ReminderDetailViewModel()
         {
@@ -102,7 +125,6 @@ namespace FoldTheDishes.ViewModels
             SaveCommand = new Command(OnSave, ValidateSave);
             this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
-            CompleteCommand = new Command(OnComplete);
 
             Title = "Edit reminder";
             
@@ -131,6 +153,13 @@ namespace FoldTheDishes.ViewModels
                     await Shell.Current.GoToAsync("//RemindersPage", true);
                 }
             };
+
+            RepeatIntervals = new ObservableCollection<string>();
+            foreach (var item in Enum.GetNames(typeof(ReminderInterval)))
+            {
+                RepeatIntervals.Add(item);
+            }
+            SelectedRepeatInterval = RepeatIntervals[0];
         }
 
         void ShowNotification(int id)
@@ -143,13 +172,7 @@ namespace FoldTheDishes.ViewModels
 
         private bool ValidateSave()
         {
-            var now = DateTime.Now;
-            return !string.IsNullOrWhiteSpace(title) && dueDate.Add(dueTime) >= now && CanSave;
-        }
-
-        private void OnComplete()
-        {
-            Completed = !Completed;
+            return CanSave;
         }
 
         private async void OnDelete()
@@ -169,18 +192,21 @@ namespace FoldTheDishes.ViewModels
 
         private async void OnSave()
         {
-            Reminder newReminder = new Reminder()
+            DateTime now = DateTime.Now;
+            reminder.Title = TitleText;
+            reminder.Notes = Notes;
+            reminder.DueDate = DueDate;
+            reminder.DueTime = DueTime;
+            reminder.Completed = Completed;
+            reminder.CompletedDate = Completed ? now : DateTime.MinValue;
+            reminder.IsRepeating = IsRepeating;
+            if (IsRepeating)
             {
-                Id = Id,
-                Title = TitleText,
-                Notes = Notes,
-                DueDate = DueDate,
-                DueTime = DueTime,
-                Completed = Completed
-            };
-
+                reminder.RepeatInterval = (ReminderInterval)Enum.Parse(typeof(ReminderInterval), SelectedRepeatInterval);
+            }
+            
             bool proceed = true;
-            bool inFuture = DueDate.Add(DueTime) > DateTime.Now;
+            bool inFuture = DueDate.Add(DueTime) > now;
 
             if (Completed && inFuture)
             {
@@ -191,7 +217,7 @@ namespace FoldTheDishes.ViewModels
             else if (inFuture)
             {
                 // Replaces the old scheduled notification
-                notificationManager.SendNotification(Id, TitleText, DueDate.Add(DueTime));
+                notificationManager.SendNotification(Id, TitleText, DueDate.Add(DueTime), reminder.RepeatInterval);
             }
 
             if (proceed)
@@ -200,7 +226,7 @@ namespace FoldTheDishes.ViewModels
                 {
                     notificationManager.DeleteNotification(Id);
                 }
-                await DataStore.UpdateItemAsync(newReminder);
+                await DataStore.UpdateItemAsync(reminder);
                 // This will pop the current page off the navigation stack
                 await Shell.Current.GoToAsync("..", true);
             }
@@ -210,18 +236,27 @@ namespace FoldTheDishes.ViewModels
         {
             try
             {
-                var reminder = await DataStore.GetItemAsync(itemId);
+                reminder = await DataStore.GetItemAsync(itemId);
                 Id = reminder.Id;
                 TitleText = originalTitle = reminder.Title;
                 Notes = originalNotes = reminder.Notes;
                 DueDate = originalDueDate = reminder.DueDate;
                 DueTime = originalDueTime = reminder.DueTime;
                 Completed = originalCompleted = reminder.Completed;
+                IsRepeating = originalIsRepeating = reminder.IsRepeating;
+                originalRepeatInterval = reminder.RepeatInterval;
+
+                if (isRepeating)
+                {
+                    SelectedRepeatInterval = originalRepeatInterval.ToString();
+                }
             }
             catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("Failed to load reminder");
             }
+
+            CanSave = false;
         }
     }
 }

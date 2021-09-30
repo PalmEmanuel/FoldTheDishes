@@ -74,6 +74,7 @@
                                                 FontSize="13" TextColor="{Binding DueDateTime, Converter={StaticResource ExpiredTextColorConverter}}"/>
                                             <Label Text="{Binding DueTime, StringFormat='{} - {0:hh\\:mm}'}"
                                                 FontSize="13" TextColor="{Binding DueDateTime, Converter={StaticResource ExpiredTextColorConverter}}"/>
+                                            <Label Margin="6,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.SyncAlt}" FontFamily="FA-S" FontSize="11" VerticalOptions="Center" HorizontalOptions="End" IsVisible="{Binding IsRepeating}"/>
                                         </StackLayout>
                                     </StackLayout>
                                     <StackLayout.GestureRecognizers>
