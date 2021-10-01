@@ -85,6 +85,25 @@ namespace FoldTheDishes.Services
             }
         }
 
+        public Task AdjustRepeatingDueDateTimes()
+        {
+            return Task.Run(() =>
+            {
+                var reminders = GetItemsAsync().GetAwaiter().GetResult();
+
+                var repeatingReminders = reminders.Where(r => !r.Completed && r.IsRepeating);
+
+                foreach (var reminder in repeatingReminders)
+                {
+                    if (DateTime.Now > reminder.DueDateTime)
+                    {
+                        reminder.DueDate = reminder.DueDate.AddMilliseconds(NotificationScheduleHelper.GetIntervalTime((ReminderInterval)reminder.RepeatInterval));
+                        UpdateItemAsync(reminder);
+                    }
+                }
+            });
+        }
+
         public Task<int> DeleteItemAsync(Reminder item)
         {
             return Database.DeleteAsync(item);

@@ -2,6 +2,7 @@
 using FoldTheDishes.Services;
 using FoldTheDishes.ViewModels;
 using FoldTheDishes.Views;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace FoldTheDishes
@@ -18,6 +19,8 @@ namespace FoldTheDishes
 
             PreferenceManager.SetTheme();
             PreferenceManager.ApplyReminderRetention(reminderStore);
+
+            reminderStore.AdjustRepeatingDueDateTimes().GetAwaiter().GetResult();
 
             DependencyService.Get<INotificationManager>().NotificationReceived += (sender, eventArgs) =>
             {

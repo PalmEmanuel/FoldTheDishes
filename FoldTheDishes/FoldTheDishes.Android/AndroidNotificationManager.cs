@@ -58,7 +58,7 @@ namespace FoldTheDishes.Services
                 intent.PutExtra(IdKey, id);
                 intent.PutExtra(TextKey, text);
 
-                long triggerTime = GetNotifyTime(notifyTime.Value);
+                long triggerTime = NotificationScheduleHelper.GetNotifyTime(notifyTime.Value);
 
                 if (repeatInterval != null)
                 {
@@ -70,7 +70,7 @@ namespace FoldTheDishes.Services
 
                 if (repeatInterval != null)
                 {
-                    long intervalTime = GetIntervalTime((ReminderInterval)repeatInterval);
+                    long intervalTime = NotificationScheduleHelper.GetIntervalTime((ReminderInterval)repeatInterval);
                     alarmManager.SetRepeating(AlarmType.RtcWakeup, triggerTime, intervalTime, pendingIntent);
                 }
                 else
@@ -140,42 +140,6 @@ namespace FoldTheDishes.Services
             }
 
             channelInitialized = true;
-        }
-
-        public static long GetNotifyTime(DateTime notifyTime)
-        {
-            DateTime utcTime = TimeZoneInfo.ConvertTimeToUtc(notifyTime);
-            double epochDiff = (new DateTime(1970, 1, 1) - DateTime.MinValue).TotalSeconds;
-            long utcAlarmTime = utcTime.AddSeconds(-epochDiff).Ticks / 10000;
-            return utcAlarmTime; // milliseconds
-        }
-
-        public static long GetIntervalTime(ReminderInterval interval)
-        {
-            var now = DateTime.Now;
-            
-            long intervalMilliseconds;
-            switch (interval)
-            {
-                //case ReminderInterval.Minutely:
-                //    intervalMilliseconds = 60 * 1000;
-                //    break;
-                case ReminderInterval.Daily:
-                    intervalMilliseconds = AlarmManager.IntervalDay;
-                    break;
-                case ReminderInterval.Weekly:
-                    intervalMilliseconds = AlarmManager.IntervalDay * 7;
-                    break;
-                case ReminderInterval.Monthly:
-                    intervalMilliseconds = (long)(now.AddMonths(1) - now).TotalMilliseconds;
-                    break;
-                case ReminderInterval.Yearly:
-                    intervalMilliseconds = DateTime.IsLeapYear(DateTime.Now.Year) ? AlarmManager.IntervalDay * 366 : AlarmManager.IntervalDay * 365;
-                    break;
-                default:
-                    throw new Exception("Unexpected interval!");
-            }
-            return intervalMilliseconds;
         }
     }
 }
