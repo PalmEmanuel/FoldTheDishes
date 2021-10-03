@@ -30,20 +30,39 @@ namespace FoldTheDishes.Droid
             {
                 int id = intent.GetIntExtra(AndroidNotificationManager.IdKey, -1);
                 string text = intent.GetStringExtra(AndroidNotificationManager.TextKey);
+
                 // See if the reminder is repeating
-                string repeatingType = intent.GetStringExtra(AndroidNotificationManager.RepeatingIntervalKey);
+                int repeatingType = intent.GetIntExtra(AndroidNotificationManager.RepeatingIntervalKey, -1);
 
                 manager.Show(id, text);
 
-                if (repeatingType != null)
+                // If repeating, schedule the next notification
+                if (repeatingType != -1)
                 {
-                    // If the repeating type is monthly we need to calculate the difference between months in days manually
-                    if (repeatingType == "monthly")
+                    // Get the time that the current notification was scheduled to, in ticks
+                    DateTime currentReminderOccurrence = new DateTime(intent.GetLongExtra(AndroidNotificationManager.NextOccurrenceKey, -1));
+
+                    // Add to that date based on interval
+                    switch ((ReminderInterval)repeatingType)
                     {
-                        // Get the time that the current notification was scheduled to
-                        DateTime currentReminderOccurrence = new DateTime(intent.GetLongExtra(AndroidNotificationManager.NextOccurrenceKey, AlarmManager.IntervalDay * 30));
-                        // Set the next notification to be one month in the future (adjusting properly for days in month)
-                        manager.SendNotification(id, text, currentReminderOccurrence.AddMonths(1), ReminderInterval.Monthly);
+                        case ReminderInterval.Daily:
+                            manager.SendNotification(id, text, currentReminderOccurrence.AddDays(1), ReminderInterval.Daily);
+                            break;
+                        
+                        case ReminderInterval.Weekly:
+                            manager.SendNotification(id, text, currentReminderOccurrence.AddDays(7), ReminderInterval.Weekly);
+                            break;
+                        
+                        case ReminderInterval.Monthly:
+                            manager.SendNotification(id, text, currentReminderOccurrence.AddMonths(1), ReminderInterval.Monthly);
+                            break;
+                        
+                        case ReminderInterval.Yearly:
+                            manager.SendNotification(id, text, currentReminderOccurrence.AddYears(1), ReminderInterval.Yearly);
+                            break;
+
+                        default:
+                            throw new Exception("Unexpected repeating schedule!");
                     }
                 }
             }

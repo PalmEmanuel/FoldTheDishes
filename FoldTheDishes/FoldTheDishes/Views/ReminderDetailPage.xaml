@@ -30,7 +30,7 @@
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15">
             <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                <Entry Text="{Binding TitleText, Mode=TwoWay}" Placeholder="Title" HorizontalOptions="FillAndExpand"
+                <Entry Text="{Binding TitleText, Mode=TwoWay}" Placeholder="Title" HorizontalOptions="Fill" WidthRequest="50"
                        IsEnabled="{Binding Completed, Converter={StaticResource InverseBooleanConverter}}">
                     <Entry.Behaviors>
                         <behaviors:EntryNotEmptyValidation/>

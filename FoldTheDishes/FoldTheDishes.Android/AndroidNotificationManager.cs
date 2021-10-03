@@ -62,21 +62,13 @@ namespace FoldTheDishes.Services
 
                 if (repeatInterval != null)
                 {
-                    intent.PutExtra(RepeatingIntervalKey, repeatInterval.ToString());
+                    intent.PutExtra(RepeatingIntervalKey, (int)repeatInterval);
                     intent.PutExtra(NextOccurrenceKey, notifyTime.Value.Ticks);
                 }
 
                 PendingIntent pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, id, intent, PendingIntentFlags.UpdateCurrent);
 
-                if (repeatInterval != null)
-                {
-                    long intervalTime = NotificationScheduleHelper.GetIntervalTime((ReminderInterval)repeatInterval);
-                    alarmManager.SetRepeating(AlarmType.RtcWakeup, triggerTime, intervalTime, pendingIntent);
-                }
-                else
-                {
-                    alarmManager.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, triggerTime, pendingIntent);
-                }
+                alarmManager.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, triggerTime, pendingIntent);
             }
             else
             {
