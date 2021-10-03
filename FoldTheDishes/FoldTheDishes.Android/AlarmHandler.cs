@@ -45,6 +45,9 @@ namespace FoldTheDishes.Droid
                     // Add to that date based on interval
                     switch ((ReminderInterval)repeatingType)
                     {
+                        //case ReminderInterval.Minutely:
+                        //    manager.SendNotification(id, text, currentReminderOccurrence.AddMinutes(1), ReminderInterval.Minutely);
+                        //    break;
                         case ReminderInterval.Daily:
                             manager.SendNotification(id, text, currentReminderOccurrence.AddDays(1), ReminderInterval.Daily);
                             break;

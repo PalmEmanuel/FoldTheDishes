@@ -2,10 +2,10 @@
 {
     public enum ReminderInterval
     {
-        //Minutely,
         Daily,
         Weekly,
         Monthly,
         Yearly
+        //, Minutely
     }
 }

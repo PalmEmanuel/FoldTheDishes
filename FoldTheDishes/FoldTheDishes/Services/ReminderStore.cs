@@ -95,11 +95,14 @@ namespace FoldTheDishes.Services
 
                 foreach (var reminder in repeatingReminders)
                 {
-                    if (DateTime.Now > reminder.DueDateTime)
+                    var dueDateTime = reminder.DueDateTime;
+                    while (DateTime.Now > dueDateTime)
                     {
-                        reminder.DueDate = reminder.DueDate.AddMilliseconds(NotificationScheduleHelper.GetIntervalTime((ReminderInterval)reminder.RepeatInterval));
-                        UpdateItemAsync(reminder);
+                        dueDateTime = dueDateTime.AddMilliseconds(NotificationScheduleHelper.GetIntervalTime((ReminderInterval)reminder.RepeatInterval));
                     }
+                    reminder.DueDate = dueDateTime.Date;
+                    reminder.DueTime = dueDateTime.TimeOfDay;
+                    UpdateItemAsync(reminder);
                 }
             });
         }
