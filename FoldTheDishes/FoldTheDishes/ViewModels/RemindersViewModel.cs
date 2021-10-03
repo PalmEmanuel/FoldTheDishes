@@ -130,6 +130,12 @@ namespace FoldTheDishes.ViewModels
 
         private async Task CheckedChanged(Reminder reminder)
         {
+            // If the navigation has not completed to RemindersPage, skip updating item in database
+            // This fixes a problem where navigating would update reminders, making CompletedDate wrong and Completed impossible to change from Detail view
+            if (!Shell.Current.CurrentState.Location.OriginalString.EndsWith("RemindersPage"))
+            {
+                return;
+            }
             // Value has already changed because of the two-way binding
             if (reminder.Completed)
             {

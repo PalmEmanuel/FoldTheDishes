@@ -112,7 +112,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout x:DataType="model:Reminder" Orientation="Horizontal" Padding="10,5,10,5">
-                                <CheckBox VerticalOptions="Center" HorizontalOptions="Center" IsChecked="{Binding Completed}">
+                                <CheckBox VerticalOptions="Center" HorizontalOptions="Center" IsChecked="{Binding Completed, Mode=TwoWay}">
                                     <CheckBox.Behaviors>
                                         <!-- The reference needs to go through the binding context, and does not work like the TapGestureRecognizer further below
                                         https://docs.microsoft.com/en-us/answers/questions/327979/xamarin-forms-switch-using-eventtocommandbehavior.html
