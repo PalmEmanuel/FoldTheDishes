@@ -43,7 +43,7 @@ namespace FoldTheDishes.Services
                     return;
             }
 
-            var itemsToDelete = store.GetDoneItemsThatAreOlderThanDateAsync(date).Result;
+            var itemsToDelete = store.GetDoneItemsThatAreOlderThanDateAsync(date).GetAwaiter().GetResult();
 
             foreach (var item in itemsToDelete)
             {

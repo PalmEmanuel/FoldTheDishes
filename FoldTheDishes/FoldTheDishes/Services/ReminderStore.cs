@@ -50,22 +50,24 @@ namespace FoldTheDishes.Services
 
         public Task<List<Reminder>> GetDoneItemsThatAreOlderThanDateAsync(DateTime date)
         {
-            return Database.QueryAsync<Reminder>($"SELECT * FROM [Reminder] WHERE [Completed] = true AND [DueDate] < {date.Ticks}");
+            return Database.Table<Reminder>().Where(r => r.Completed && r.DueDate < date).ToListAsync();
         }
 
         public Task<List<Reminder>> GetNotExpiredNotDoneItems()
         {
-            return Database.QueryAsync<Reminder>($"SELECT * FROM [Reminder] WHERE [Completed] = false AND [DueDate] >= {DateTime.Now.TrimToMinutes().Ticks}");
+            var now = DateTime.Now.TrimToMinutes();
+            // Either duedate is tomorrow or onwards, or it's today and the time is later
+            return Database.Table<Reminder>().Where(r => !r.Completed && (r.DueDate > now.Date || (r.DueDate == now.Date && r.DueTime > now.TimeOfDay))).ToListAsync();
         }
 
         public Task<List<Reminder>> GetNotDoneItems()
         {
-            return Database.QueryAsync<Reminder>($"SELECT * FROM [Reminder] WHERE [Completed] = false");
+            return Database.Table<Reminder>().Where(r => !r.Completed).ToListAsync();
         }
 
         public Task<Reminder> GetItemAsync(int id)
         {
-            return Database.Table<Reminder>().Where(i => i.Id == id).FirstOrDefaultAsync();
+            return Database.Table<Reminder>().Where(r => r.Id == id).FirstOrDefaultAsync();
         }
 
         public Task<int> AddItemAsync(Reminder reminder)

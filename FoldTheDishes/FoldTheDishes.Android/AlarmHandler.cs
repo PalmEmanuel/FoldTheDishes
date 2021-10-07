@@ -19,7 +19,7 @@ namespace FoldTheDishes.Droid
             {
                 // Not using dependency service since the ReminderStore has not been registered when the boot event is received
                 var dataStore = ReminderStore.Instance.GetAwaiter().GetResult();
-                var notDoneItems = dataStore.GetNotDoneItems().Result;
+                var notDoneItems = dataStore.GetNotExpiredNotDoneItems().GetAwaiter().GetResult();
 
                 foreach (var item in notDoneItems)
                 {
